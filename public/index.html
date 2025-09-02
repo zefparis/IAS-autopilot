@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI + Web3 Revenue Engine">
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%2300f2ff'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='%230a0f14'>IAS</text></svg>">
+  <link rel="stylesheet" href="/assets/tailwind.css">
+  <title>IAS Autopilot</title>
+</head>
+<body class="min-h-screen font-sans antialiased">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-bg/90 backdrop-blur-sm border-b border-white/10">
+    <div class="container flex items-center justify-between h-16">
+      <a href="#" class="flex items-center">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" stroke="url(#gradient)" stroke-width="4" />
+          <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f2ff" />
+              <stop offset="100%" stop-color="#ff2fd0" />
+            </linearGradient>
+          </defs>
+          <text x="20" y="26" text-anchor="middle" font-size="14" fill="#eaf6ff" font-weight="bold">IAS</text>
+        </svg>
+        <span class="ml-2 text-xl font-bold">Autopilot</span>
+      </a>
+      
+      <nav class="hidden md:flex items-center space-x-8">
+        <a href="#mecanisme" class="hover:text-cyan transition-colors">Mécanisme</a>
+        <a href="#tokenomics" class="hover:text-cyan transition-colors">Tokenomics</a>
+        <a href="#faq" class="hover:text-cyan transition-colors">FAQ</a>
+        <a href="#contact" class="hover:text-cyan transition-colors">Contact</a>
+      </nav>
+      
+      <button class="btn-primary">DM / Demo</button>
+      
+      <button id="mobile-menu-button" class="md:hidden" aria-label="Menu" aria-expanded="false">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden hidden absolute top-full left-0 right-0 bg-bg border-t border-white/10">
+      <div class="container py-4 space-y-4">
+        <a href="#mecanisme" class="block py-2 hover:text-cyan transition-colors">Mécanisme</a>
+        <a href="#tokenomics" class="block py-2 hover:text-cyan transition-colors">Tokenomics</a>
+        <a href="#faq" class="block py-2 hover:text-cyan transition-colors">FAQ</a>
+        <a href="#contact" class="block py-2 hover:text-cyan transition-colors">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="py-20 md:py-32">
+      <div class="container text-center">
+        <span class="badge">⚡ IAS</span>
+        <h1 class="text-4xl md:text-6xl font-bold mt-6 mb-4 max-w-3xl mx-auto">
+          AI + Web3 Revenue Engine
+        </h1>
+        <p class="text-muted text-xl max-w-2xl mx-auto mb-10">
+          Autopilot → génère de la valeur → IAS (IA-SOLUTION Token).
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <a href="#diagram" class="btn-primary">Voir le diagramme</a>
+          <a href="#contact" class="btn-ghost">Nous contacter</a>
+        </div>
+        
+        <div class="flex flex-wrap justify-center gap-3 mt-12">
+          <span class="chip">Web3</span>
+          <span class="chip">AI</span>
+          <span class="chip">Revenue Engine</span>
+          <span class="chip">Tokenomics</span>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Cards -->
+    <section id="mecanisme" class="py-20 border-t border-white/10">
+      <div class="container">
+        <h2 class="text-3xl font-bold text-center mb-16">Notre Solution</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white/5 p-8 rounded-xl border border-white/10">
+            <h3 class="text-xl font-bold mb-4">Problème</h3>
+            <p>Les entreprises peinent à monétiser efficacement leurs données et processus métier.</p>
+          </div>
+          <div class="bg-white/5 p-8 rounded-xl border border-white/10">
+            <h3 class="text-xl font-bold mb-4">Moteur à effet Flywheel</h3>
+            <p>Notre technologie crée un cycle vertueux de création de valeur.</p>
+          </div>
+          <div class="bg-white/5 p-8 rounded-xl border border-white/10">
+            <h3 class="text-xl font-bold mb-4">Stack mentale</h3>
+            <p>Une approche cognitive révolutionnaire pour l'optimisation revenue.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Diagram -->
+    <section id="diagram" class="py-20 border-t border-white/10">
+      <div class="container">
+        <div class="max-w-4xl mx-auto overflow-x-auto">
+          <svg viewBox="0 0 800 400" class="w-full">
+            <!-- Simplified diagram: Autopilot Engine → IAS Token -->
+            <rect x="50" y="150" width="300" height="100" rx="10" fill="#0a0f14" stroke="#00f2ff" stroke-width="2"/>
+            <text x="200" y="200" text-anchor="middle" fill="#eaf6ff" font-size="20">Autopilot Engine</text>
+            <path d="M350 200 L450 200" stroke="#ff2fd0" stroke-width="3" marker-end="url(#arrow)"/>
+            <rect x="450" y="150" width="300" height="100" rx="10" fill="#0a0f14" stroke="#ff2fd0" stroke-width="2"/>
+            <text x="600" y="200" text-anchor="middle" fill="#eaf6ff" font-size="20">IAS (IA-SOLUTION Token)</text>
+            <defs>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#ff2fd0"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Tokenomics -->
+    <section id="tokenomics" class="py-20 border-t border-white/10">
+      <div class="container">
+        <h2 class="text-3xl font-bold text-center mb-16">Tokenomics</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white/5 p-8 rounded-xl border border-white/10">
+            <h3 class="text-xl font-bold mb-4">Distribution</h3>
+            <p>Modèle équitable avec allocation communautaire majoritaire.</p>
+          </div>
+          <div class="bg-white/5 p-8 rounded-xl border border-white/10">
+            <h3 class="text-xl font-bold mb-4">Utility</h3>
+            <p>Accès premium, gouvernance, et récompenses de staking.</p>
+          </div>
+          <div class="bg-white/5 p-8 rounded-xl border border-white/10">
+            <h3 class="text-xl font-bold mb-4">Roadmap</h3>
+            <ul class="space-y-2">
+              <li>Q4 2023: Lancement testnet</li>
+              <li>Q1 2024: IDO & TGE</li>
+              <li>Q2 2024: Intégrations majeures</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- FAQ -->
+    <section id="faq" class="py-20 border-t border-white/10">
+      <div class="container max-w-3xl">
+        <h2 class="text-3xl font-bold text-center mb-16">FAQ</h2>
+        <div class="space-y-2">
+          <div class="border-b border-white/10">
+            <button class="faq-btn" aria-expanded="false">
+              <span>Comment fonctionne l'Autopilot ?</span>
+              <svg class="faq-icon transform transition-transform" width="20" height="20" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M7 10l5 5 5-5z"/>
+              </svg>
+            </button>
+            <div class="faq-a">
+              <div class="pb-5 text-muted">
+                <p>L'Autopilot utilise l'IA pour automatiser et optimiser les processus de génération de revenue.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="border-b border-white/10">
+            <button class="faq-btn" aria-expanded="false">
+              <span>Quelle est l'utilité du token IAS ?</span>
+              <svg class="faq-icon transform transition-transform" width="20" height="20" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M7 10l5 5 5-5z"/>
+              </svg>
+            </button>
+            <div class="faq-a">
+              <div class="pb-5 text-muted">
+                <p>Le token IAS sert de mécanisme de gouvernance, d'accès aux services premium, et de récompenses.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Contact -->
+    <section id="contact" class="py-20 border-t border-white/10">
+      <div class="container max-w-2xl">
+        <h2 class="text-3xl font-bold text-center mb-12">Contact</h2>
+        <div class="bg-white/5 p-8 rounded-xl border border-white/10">
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 class="text-xl font-bold mb-4">Discutons</h3>
+              <p class="text-muted mb-6">Prêt à transformer votre business ?</p>
+              <button id="copy-teaser" class="btn-ghost flex items-center">
+                <span>Copier le teaser</span>
+                <svg class="ml-2" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+              </button>
+            </div>
+            <div>
+              <div class="mb-4">
+                <label class="block text-sm mb-2" for="email">Email</label>
+                <input type="email" id="email" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan">
+              </div>
+              <button class="btn-primary w-full">Envoyer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="py-10 border-t border-white/10">
+    <div class="container text-center text-muted text-sm">
+      <p class="mb-4">IAS Autopilot - AI + Web3 Revenue Engine</p>
+      <p>© <span id="current-year"></span> Tous droits réservés</p>
+    </div>
+  </footer>
+
+  <script>
+    // Set current year
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (mobileMenuButton && mobileMenu) {
+      mobileMenuButton.addEventListener('click', () => {
+        const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+        mobileMenuButton.setAttribute('aria-expanded', !expanded);
+        mobileMenu.classList.toggle('hidden');
+      });
+      
+      // Close on outside click
+      document.addEventListener('click', (e) => {
+        if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+          mobileMenuButton.setAttribute('aria-expanded', 'false');
+          mobileMenu.classList.add('hidden');
+        }
+      });
+      
+      // Close on ESC
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          mobileMenuButton.setAttribute('aria-expanded', 'false');
+          mobileMenu.classList.add('hidden');
+        }
+      });
+    }
+
+    // FAQ toggle
+    document.querySelectorAll('.faq-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', !expanded);
+        
+        const content = button.nextElementSibling;
+        content.classList.toggle('open');
+        
+        const icon = button.querySelector('.faq-icon');
+        icon.classList.toggle('rotate-180');
+      });
+    });
+
+    // Copy teaser
+    const copyTeaserButton = document.getElementById('copy-teaser');
+    if (copyTeaserButton) {
+      copyTeaserButton.addEventListener('click', () => {
+        const text = "Découvrez IAS Autopilot: l'IA qui génère du revenue en mode pilote automatique. #Web3 #AI";
+        navigator.clipboard.writeText(text).then(() => {
+          const originalText = copyTeaserButton.querySelector('span').textContent;
+          copyTeaserButton.querySelector('span').textContent = 'Copié!';
+          setTimeout(() => {
+            copyTeaserButton.querySelector('span').textContent = originalText;
+          }, 2000);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
