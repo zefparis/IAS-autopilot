@@ -1,91 +1,6 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <style>
-    /* Animation de flux de données améliorée */
-    .data-flow {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-      overflow: visible;
-    }
-    
-    .data-particle {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      background: #00f2ff;
-      border-radius: 50%;
-      opacity: 0;
-      filter: drop-shadow(0 0 10px #00f2ff);
-      z-index: 1;
-    }
-    
-    .data-particle::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: #00f2ff;
-      border-radius: 50%;
-      animation: pulse 1s infinite;
-    }
-    
-    @keyframes dataFlow {
-      0% { 
-        transform: translate(var(--start-x), var(--start-y)) scale(0.5);
-        opacity: 0;
-      }
-      10% { 
-        opacity: 1;
-        transform: translate(var(--start-x), var(--start-y)) scale(1);
-      }
-      90% { 
-        opacity: 1;
-      }
-      100% { 
-        transform: translate(var(--end-x), var(--end-y)) scale(1.2);
-        opacity: 0;
-      }
-    }
-    
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.7; }
-      100% { transform: scale(2.5); opacity: 0; }
-    }
-
-    @keyframes circuitMove {
-      0% { background-position: 0 0, 0 0, 50% 50%; }
-      100% { background-position: 4rem 4rem, 4rem 4rem, 50% 50%; }
-    }
-
-    /* Effet de balayage laser */
-    .laser-scan {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(0, 242, 255, 0.03) 50%,
-        transparent 100%
-      );
-      z-index: -1;
-      animation: scan 8s linear infinite;
-      pointer-events: none;
-    }
-
-    @keyframes scan {
-      0% { transform: translateY(-100%); }
-      100% { transform: translateY(100%); }
-    }
-  </style>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>IAS Autopilot — AI + Web3 Revenue Engine</title>
@@ -94,58 +9,95 @@
   <meta property="og:title" content="IAS Autopilot — AI + Web3 Revenue Engine" />
   <meta property="og:description" content="Autopilot → génère de la valeur → IAS (IA-SOLUTION Token). Découvrez le mécanisme, la tokenomics et les cas d’usage." />
   <meta property="og:type" content="website" />
+
+  <!-- Favicon inline -->
   <link rel="icon" href="data:image/svg+xml;utf8,
-    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
-      <defs>
-        <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
-          <stop offset='0%' stop-color='%2300f2ff'/><stop offset='100%' stop-color='%23ff2fd0'/>
-        </linearGradient>
-      </defs>
-      <circle cx='50' cy='50' r='45' fill='none' stroke='url(%23g)' stroke-width='10'/>
-      <text x='50' y='60' font-size='40' text-anchor='middle' fill='%23eaf6ff' font-weight='bold'>IAS</text>
-    </svg>">
-  <!-- Tailwind build -->
+  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+    <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0%' stop-color='%2300f2ff'/><stop offset='100%' stop-color='%23ff2fd0'/></linearGradient></defs>
+    <circle cx='50' cy='50' r='45' fill='none' stroke='url(%23g)' stroke-width='10'/>
+    <text x='50' y='60' font-size='40' text-anchor='middle' fill='%23eaf6ff' font-weight='bold'>IAS</text>
+  </svg>">
+
+  <!-- Tailwind compilé par ton build -->
   <link rel="stylesheet" href="/assets/tailwind.css" />
+
   <style>
-    :root{ --line: rgba(255,255,255,.12); }
+    /* Animation de flux de données */
+    .data-flow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+    
+    .data-particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: linear-gradient(135deg, #00f2ff, #ff2fd0);
+      border-radius: 50%;
+      filter: drop-shadow(0 0 10px #00f2ff);
+      opacity: 0;
+      transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 2;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(2.5); opacity: 0; }
+    }
+
+    :root{
+      --line: rgba(255,255,255,.12);
+      --bg: #0a0f14;
+    }
     body{
-      background:#0a0f14;
+      background: var(--bg);
       background-image:
         radial-gradient(900px 500px at 50% -120px, rgba(0,242,255,.06), transparent 60%),
         radial-gradient(800px 400px at 90% 120%, rgba(255,47,208,.06), transparent 60%);
       color:#eaf6ff;
     }
-    /* micro utils pour compat sans dépendre de classes custom Tailwind générées */
+    /* helpers sans dépendances custom build */
     .badge{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--line);padding:.4rem .8rem;border-radius:999px;background:rgba(255,255,255,.05)}
     .chip{display:inline-flex;align-items:center;border:1px solid var(--line);padding:.35rem .75rem;border-radius:999px;background:rgba(255,255,255,.05);color:#9ab0c6}
     .faq-btn{width:100%;text-align:left;padding:1rem 0;display:flex;justify-content:space-between;align-items:center;font-weight:600}
-    .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
-    .faq-open .faq-a{max-height:400px}
-    /* safe gradient text (fallback) */
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .28s ease}
+    .faq-open .faq-a{max-height:420px}
     .title-grad{color:#eaf6ff}
-    @supports (-webkit-background-clip:text){
+    @supports(-webkit-background-clip:text){
       .title-grad{
         background:linear-gradient(90deg,#00f2ff,#ff2fd0);
         -webkit-background-clip:text;background-clip:text;
         -webkit-text-fill-color:transparent;color:transparent
       }
     }
+    /* laser scan subtil */
+    .laser-scan{position:fixed;inset:0;pointer-events:none;z-index:-1;
+      background:linear-gradient(to bottom,transparent 0%,rgba(0,242,255,.035) 50%,transparent 100%);
+      animation:scan 8s linear infinite}
+    @keyframes scan{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
+    /* reduce motion */
+    @media (prefers-reduced-motion: reduce){.laser-scan{animation:none}}
   </style>
 </head>
-<body class="min-h-screen font-sans antialiased selection:bg-cyan/20 selection:text-white relative overflow-hidden">
-  <!-- Animation de flux de données -->
+<body class="min-h-screen font-sans antialiased selection:bg-cyan/20 selection:text-white relative">
+
   <div class="data-flow" id="dataFlow"></div>
+  <div class="laser-scan"></div>
+
   <!-- Header -->
   <header class="sticky top-0 z-50 bg-black/60 backdrop-blur border-b border-white/10">
     <div class="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
       <a href="#top" class="flex items-center gap-2" aria-label="Accueil IAS">
-        <!-- inline logo -->
-        <svg id="autopilot-logo" class="w-9 h-9" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <defs>
-            <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#ff2fd0"/><stop offset="100%" stop-color="#00f2ff"/>
-            </linearGradient>
-          </defs>
+        <svg id="logo-ias" class="w-9 h-9" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <defs><linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ff2fd0"/><stop offset="100%" stop-color="#00f2ff"/></linearGradient></defs>
           <circle cx="20" cy="20" r="18" stroke="url(#ring)" stroke-width="3"/>
           <text x="20" y="25" text-anchor="middle" font-size="12" fill="#eaf6ff" font-weight="700">IAS</text>
         </svg>
@@ -154,7 +106,7 @@
 
       <nav class="hidden md:flex items-center gap-6">
         <a class="text-white/80 hover:text-cyan transition" href="#mecanisme">Mécanisme</a>
-        <a class="text-white/80 hover:text-cyan transition" href="#valeur">Flux → IAS</a>
+        <a class="text-white/80 hover:text-cyan transition" href="#neon-flow">Flux → IAS</a>
         <a class="text-white/80 hover:text-cyan transition" href="#tokenomics">Tokenomics</a>
         <a class="text-white/80 hover:text-cyan transition" href="#usecases">Cas d’usage</a>
         <a class="text-white/80 hover:text-cyan transition" href="#faq">FAQ</a>
@@ -163,7 +115,7 @@
 
       <div class="hidden md:block">
         <a href="#contact" class="inline-flex items-center justify-center px-5 py-2 rounded-xl font-semibold text-[#08121b]
-           bg-gradient-to-r from-cyan to-mag shadow-[0_10px_30px_rgba(0,242,255,.2),0_14px_40px_rgba(255,47,208,.15)]
+           bg-gradient-to-r from-cyan-400 to-fuchsia-500 shadow-[0_10px_30px_rgba(0,242,255,.2),0_14px_40px_rgba(255,47,208,.15)]
            hover:brightness-110 transition">DM / Demo</a>
       </div>
 
@@ -173,16 +125,16 @@
     </div>
 
     <!-- Mobile sheet -->
-    <div id="menu" class="md:hidden hidden border-t border-white/10 bg-black/80 backdrop-blur">
+    <div id="mobile-menu" class="md:hidden hidden border-t border-white/10 bg-black/80 backdrop-blur">
       <div class="mx-auto max-w-7xl px-6 py-4 grid gap-3">
         <a class="py-2 hover:text-cyan transition" href="#mecanisme">Mécanisme</a>
-        <a class="py-2 hover:text-cyan transition" href="#valeur">Flux → IAS</a>
+        <a class="py-2 hover:text-cyan transition" href="#neon-flow">Flux → IAS</a>
         <a class="py-2 hover:text-cyan transition" href="#tokenomics">Tokenomics</a>
         <a class="py-2 hover:text-cyan transition" href="#usecases">Cas d’usage</a>
         <a class="py-2 hover:text-cyan transition" href="#faq">FAQ</a>
         <a class="py-2 hover:text-cyan transition" href="#contact">Contact</a>
         <a class="mt-2 inline-flex items-center justify-center px-4 py-2 rounded-xl font-semibold text-[#08121b]
-           bg-gradient-to-r from-cyan to-mag shadow-[0_10px_30px_rgba(0,242,255,.2),0_14px_40px_rgba(255,47,208,.15)]"
+           bg-gradient-to-r from-cyan-400 to-fuchsia-500 shadow-[0_10px_30px_rgba(0,242,255,.2),0_14px_40px_rgba(255,47,208,.15)]"
            href="#contact">DM / Demo</a>
       </div>
     </div>
@@ -201,8 +153,8 @@
         </p>
 
         <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4">
-          <a href="#diagram" class="inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-[#08121b]
-             bg-gradient-to-r from-cyan to-mag shadow-[0_10px_30px_rgba(0,242,255,.2),0_14px_40px_rgba(255,47,208,.15)]
+          <a href="#neon-flow" class="inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-[#08121b]
+             bg-gradient-to-r from-cyan-400 to-fuchsia-500 shadow-[0_10px_30px_rgba(0,242,255,.2),0_14px_40px_rgba(255,47,208,.15)]
              hover:brightness-110 transition">Voir le mécanisme</a>
           <a href="#contact" class="inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold border border-white/10 bg-white/5 backdrop-blur
              hover:bg-white/10 transition">Nous contacter</a>
@@ -212,7 +164,7 @@
           <span class="chip">IA + Web3</span>
           <span class="chip">Pipelines & Oracles</span>
           <span class="chip">Uplift / LTV / Bandits</span>
-          <span class="chip">Buyback / Emission</span>
+          <span class="chip">Buyback / Émission</span>
           <span class="chip">Gouvernance</span>
         </div>
       </div>
@@ -228,134 +180,154 @@
         </p>
 
         <div class="grid md:grid-cols-5 gap-4 md:gap-6">
-          <div class="bg-white/5 p-5 rounded-xl border border-white/10">
-            <h3 class="font-semibold mb-2">1) Ingest</h3>
-            <p class="text-sm text-white/70">Connecteurs (ads, e-com, CRM, on-chain, events web). Normalisation & feature store quasi temps réel.</p>
-          </div>
-          <div class="bg-white/5 p-5 rounded-xl border border-white/10">
-            <h3 class="font-semibold mb-2">2) Score</h3>
-            <p class="text-sm text-white/70">Modèles (uplift, LTV, propension, risque). Bandits/AB et forecast pour estimer l’impact incrémental.</p>
-          </div>
-          <div class="bg-white/5 p-5 rounded-xl border border-white/10">
-            <h3 class="font-semibold mb-2">3) Decide</h3>
-            <p class="text-sm text-white/70">Policy engine: contraintes, SLA, budget & ROI min. Génère des <em>intents</em> d’actions priorisés.</p>
-          </div>
-          <div class="bg-white/5 p-5 rounded-xl border border-white/10">
-            <h3 class="font-semibold mb-2">4) Act</h3>
-            <p class="text-sm text-white/70">Exécuteurs (buying, pricing, messages, workflows). Adapters API partenaires & on-chain.</p>
-          </div>
-          <div class="bg-white/5 p-5 rounded-xl border border-white/10">
-            <h3 class="font-semibold mb-2">5) Measure</h3>
-            <p class="text-sm text-white/70">Attributions MTA/MMM, dérive, backtests. Le feedback réentraîne et reroute les budgets.</p>
-          </div>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-6 mt-10">
-          <div class="bg-white/5 p-6 rounded-xl border border-white/10">
-            <h3 class="text-xl font-bold mb-2">Problème → Solution</h3>
-            <p class="text-white/70">Monétisation fragmentée & coûteuse. <b>Autopilot</b> ingère, score, optimise et exécute → revenus mesurables.</p>
-          </div>
-          <div class="bg-white/5 p-6 rounded-xl border border-white/10">
-            <h3 class="text-xl font-bold mb-2">Flywheel</h3>
-            <p class="text-white/70">+ d’usage Autopilot → + de valeur → + de demande <b>IAS</b> → + d’acteurs → + de flux Autopilot.</p>
-          </div>
-          <div class="bg-white/5 p-6 rounded-xl border border-white/10">
-            <h3 class="text-xl font-bold mb-2">Stack mentale</h3>
-            <p class="text-white/70">Pipelines → Scoring → Optimisation → Exécution. Mesure → learning → réallocation.</p>
-          </div>
+          <div class="bg-white/5 p-5 rounded-xl border border-white/10"><h3 class="font-semibold mb-2">1) Ingest</h3><p class="text-sm text-white/70">Connecteurs (ads, e-com, CRM, on-chain, events web). Normalisation & feature store quasi temps réel.</p></div>
+          <div class="bg-white/5 p-5 rounded-xl border border-white/10"><h3 class="font-semibold mb-2">2) Score</h3><p class="text-sm text-white/70">Modèles (uplift, LTV, propension, risque). Bandits/AB et forecast pour estimer l’impact incrémental.</p></div>
+          <div class="bg-white/5 p-5 rounded-xl border border-white/10"><h3 class="font-semibold mb-2">3) Decide</h3><p class="text-sm text-white/70">Policy engine: contraintes, SLA, budget & ROI min. Génère des <em>intents</em> d’actions priorisés.</p></div>
+          <div class="bg-white/5 p-5 rounded-xl border border-white/10"><h3 class="font-semibold mb-2">4) Act</h3><p class="text-sm text-white/70">Exécuteurs (buying, pricing, messages, workflows). Adapters API partenaires & on-chain.</p></div>
+          <div class="bg-white/5 p-5 rounded-xl border border-white/10"><h3 class="font-semibold mb-2">5) Measure</h3><p class="text-sm text-white/70">Attributions MTA/MMM, dérive, backtests. Le feedback réentraîne et reroute les budgets.</p></div>
         </div>
       </div>
     </section>
 
-    <!-- Diagram -->
-    <section id="diagram" class="py-20 border-t border-white/10">
-      <div class="mx-auto max-w-7xl px-6">
-        <h2 class="text-3xl font-bold text-center mb-10">Autopilot Engine → IAS (IA-SOLUTION Token)</h2>
-        <div class="max-w-5xl mx-auto overflow-x-auto rounded-xl border border-white/10 bg-white/5 p-3">
-          <svg viewBox="0 0 1100 340" class="w-full h-auto">
-            <defs>
-              <linearGradient id="g-cyan" x1="0" x2="1"><stop offset="0%" stop-color="#00f2ff"/><stop offset="100%" stop-color="#66fff7"/></linearGradient>
-              <linearGradient id="g-mag"  x1="0" x2="1"><stop offset="0%" stop-color="#ff2fd0"/><stop offset="100%" stop-color="#ffa1f1"/></linearGradient>
-              <linearGradient id="g-arrow" x1="0" x2="1"><stop offset="0%" stop-color="#00f2ff"/><stop offset="100%" stop-color="#ff2fd0"/></linearGradient>
-              <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
-                <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00f2ff" flood-opacity=".45"/>
-                <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="#ff2fd0" flood-opacity=".35"/>
-              </filter>
-            </defs>
-            <!-- cockpit -->
-            <g transform="translate(80,54)" filter="url(#soft)">
-              <circle cx="100" cy="110" r="90" fill="none" stroke="url(#g-cyan)" stroke-width="3"/>
-              <rect x="60" y="90" width="80" height="46" rx="6" fill="none" stroke="url(#g-cyan)" stroke-width="3"/>
-              <rect x="40" y="140" width="40" height="26" rx="6" fill="none" stroke="url(#g-cyan)" stroke-width="3"/>
-              <rect x="120" y="140" width="40" height="26" rx="6" fill="none" stroke="url(#g-cyan)" stroke-width="3"/>
-              <text x="100" y="230" text-anchor="middle" fill="#bff8ff" font-size="18" font-weight="700">AUTOPILOT</text>
-              <text x="100" y="252" text-anchor="middle" fill="#9ad7ff" font-size="14">ENGINE</text>
-            </g>
-            <!-- arrow -->
-            <g transform="translate(290,130)" filter="url(#soft)">
-              <rect x="0" y="28" width="520" height="6" rx="3" fill="url(#g-arrow)"/>
-              <polygon points="520,1 520,61 600,31" fill="url(#g-mag)"/>
-              <circle r="6" fill="#fff">
-                <animate attributeName="cx" from="10" to="520" dur="2.8s" repeatCount="indefinite" />
-                <animate attributeName="cy" values="31;29;33;31" dur="2.8s" repeatCount="indefinite"/>
-                <animate attributeName="opacity" values="0;1;1;0" dur="2.8s" repeatCount="indefinite"/>
-              </circle>
-            </g>
-            <!-- coin -->
-            <g transform="translate(800,44)" filter="url(#soft)">
-              <circle cx="120" cy="120" r="95" fill="none" stroke="url(#g-mag)" stroke-width="4"/>
-              <circle cx="120" cy="120" r="70" fill="none" stroke="url(#g-mag)" stroke-width="3"/>
-              <text id="ias-token" x="120" y="128" text-anchor="middle" fill="#ffd8f6" font-size="44" font-weight="900">IAS</text>
-              <text x="120" y="158" text-anchor="middle" fill="#ffc8f2" font-size="13">IA-SOLUTION Token</text>
-            </g>
-          </svg>
-        </div>
-        <div class="mt-4 flex flex-wrap gap-2 justify-center">
-          <span class="chip">IA + Web3 Automation</span>
-          <span class="chip">Value Routing → Token</span>
-          <span class="chip">Flywheel compatible</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Flux de valeur → IAS -->
-    <section id="valeur" class="py-20 border-t border-white/10">
-      <div class="mx-auto max-w-7xl px-6">
-        <h2 class="text-3xl font-bold text-center mb-3">De la valeur générée → au token <span class="title-grad">IAS</span></h2>
-        <p class="text-center text-white/70 max-w-3xl mx-auto mb-12">
-          L’Autopilot crée des flux économiques (économies de coûts, revenus incrémentaux, frais d’usage). Ces flux sont routés vers le token <b>IAS</b> selon une policy configurable.
+    <!-- NEON FLOW: Scraper -> Blockchain -> IAS -->
+    <section id="neon-flow" class="py-20 border-t border-white/10">
+      <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-3">Flux néon — de <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-fuchsia-500">Scrapers</span> jusqu’à <span class="bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-cyan-400">IAS</span></h2>
+        <p class="text-center text-white/70 max-w-3xl mx-auto mb-10">
+          Ingest → Score → Decide → Act → Measure. Exécution off-chain & on-chain, routage de valeur via <b>buyback</b> / <b>émission contrôlée</b> → <b>IAS</b>.
         </p>
 
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="bg-white/5 p-6 rounded-xl border border-white/10">
-            <h3 class="text-lg font-semibold mb-2">Mode A — Buyback & Usage</h3>
-            <ul class="list-disc list-inside text-white/70 space-y-1">
-              <li>Frais d’usage Autopilot perçus en monnaie locale.</li>
-              <li>Une partie automatiquement <b>convertie en IAS</b> (buyback marché).</li>
-              <li>Répartition: rewards, trésorerie, liquidité (configurable).</li>
-              <li>Optionnel: <b>burn</b> d’une fraction (déflationniste).</li>
-            </ul>
-          </div>
-          <div class="bg-white/5 p-6 rounded-xl border border-white/10">
-            <h3 class="text-lg font-semibold mb-2">Mode B — Émission contrôlée</h3>
-            <ul class="list-disc list-inside text-white/70 space-y-1">
-              <li>Issu d’un <b>budget d’émission</b> plafonné (schedule transparent).</li>
-              <li>Distribution en <b>rewards</b> corrélée à la valeur nette créée (K-facteur).</li>
-              <li>Gouvernance: quotas (plafonds, périodes, KPI).</li>
-              <li>Anti-sybil: impact réel via attribution & oracles.</li>
-            </ul>
-          </div>
+        <div class="rounded-xl border border-white/10 bg-white/5 p-3 overflow-x-auto">
+          <svg viewBox="0 0 1200 520" class="w-full h-auto" role="img" aria-label="Pipeline Scrapers vers IAS via off-chain / on-chain">
+            <!-- ======= DEFS ======= -->
+            <defs>
+              <linearGradient id="gc" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00f2ff"/><stop offset="100%" stop-color="#7af9ff"/>
+              </linearGradient>
+              <linearGradient id="gm" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#ff2fd0"/><stop offset="100%" stop-color="#ff9be9"/>
+              </linearGradient>
+              <linearGradient id="ga" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#66ffcc"/><stop offset="100%" stop-color="#a6ffd8"/>
+              </linearGradient>
+              <filter id="glowC" x="-40%" y="-40%" width="180%" height="180%">
+                <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00f2ff" flood-opacity=".55"/>
+              </filter>
+              <filter id="glowM" x="-40%" y="-40%" width="180%" height="180%">
+                <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ff2fd0" flood-opacity=".55"/>
+              </filter>
+              <filter id="glowA" x="-40%" y="-40%" width="180%" height="180%">
+                <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#66ffcc" flood-opacity=".6"/>
+              </filter>
+              <marker id="arrowC" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                <path d="M0,0 L0,12 L12,6 z" fill="#7af9ff"/>
+              </marker>
+              <marker id="arrowM" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                <path d="M0,0 L0,12 L12,6 z" fill="#ff73de"/>
+              </marker>
+              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <rect width="40" height="40" fill="rgba(10,20,30,.6)"/>
+                <path d="M40 0 H0 M0 0 V40" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+              </pattern>
+            </defs>
+
+            <!-- BACKDROP -->
+            <rect x="0" y="0" width="1200" height="520" fill="url(#grid)"/>
+
+            <!-- ======= NODES ======= -->
+            <g font-size="14" font-weight="700">
+              <!-- Top row -->
+              <g filter="url(#glowC)" id="autopilot-logo">
+                <rect x="40" y="40" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#gc)" stroke-width="3"/>
+                <text x="125" y="75" text-anchor="middle" fill="#dffaff">Scrapers</text>
+                <text x="125" y="96" text-anchor="middle" fill="#96cde0" font-size="11">Web / API</text>
+              </g>
+              <g filter="url(#glowC)">
+                <rect x="250" y="40" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#gc)" stroke-width="3"/>
+                <text x="335" y="75" text-anchor="middle" fill="#dffaff">ETL / Normalisation</text>
+                <text x="335" y="96" text-anchor="middle" fill="#96cde0" font-size="11">clean → features</text>
+              </g>
+              <g filter="url(#glowC)">
+                <rect x="460" y="40" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#gc)" stroke-width="3"/>
+                <text x="545" y="75" text-anchor="middle" fill="#dffaff">Feature Store</text>
+                <text x="545" y="96" text-anchor="middle" fill="#96cde0" font-size="11">real-time / batch</text>
+              </g>
+              <g filter="url(#glowC)">
+                <rect x="670" y="40" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#gc)" stroke-width="3"/>
+                <text x="755" y="73" text-anchor="middle" fill="#dffaff">Modèles & Scoring</text>
+                <text x="755" y="95" text-anchor="middle" fill="#96cde0" font-size="11">Uplift / LTV</text>
+              </g>
+              <g filter="url(#glowA)">
+                <rect x="880" y="40" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#ga)" stroke-width="3"/>
+                <text x="965" y="75" text-anchor="middle" fill="#e7ffee">Policy / Decision</text>
+                <text x="965" y="96" text-anchor="middle" fill="#a8ffd8" font-size="11">ROI min / SLA</text>
+              </g>
+              <!-- Middle -->
+              <g filter="url(#glowA)">
+                <rect x="880" y="180" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#ga)" stroke-width="3"/>
+                <text x="965" y="215" text-anchor="middle" fill="#e7ffee">Exécuteurs</text>
+                <text x="965" y="236" text-anchor="middle" fill="#a8ffd8" font-size="11">Ads / Pricing / Ops</text>
+              </g>
+              <!-- Bottom -->
+              <g filter="url(#glowC)">
+                <rect x="670" y="320" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#gc)" stroke-width="3"/>
+                <text x="755" y="355" text-anchor="middle" fill="#dffaff">Revenus Off-chain</text>
+                <text x="755" y="376" text-anchor="middle" fill="#96cde0" font-size="11">Frais / € / $</text>
+              </g>
+              <g filter="url(#glowC)" id="ias-token">
+                <rect x="960" y="320" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#gc)" stroke-width="3"/>
+                <text x="1045" y="355" text-anchor="middle" fill="#dffaff">Smart Contracts</text>
+                <text x="1045" y="376" text-anchor="middle" fill="#96cde0" font-size="11">On-chain</text>
+              </g>
+              <g filter="url(#glowM)">
+                <rect x="460" y="320" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#gm)" stroke-width="3"/>
+                <text x="545" y="355" text-anchor="middle" fill="#ffd8f6">Buyback / Émission</text>
+                <text x="545" y="376" text-anchor="middle" fill="#ffc3ef" font-size="11">Controller</text>
+              </g>
+            </g>
+
+            <!-- IAS coin -->
+            <g filter="url(#glowM)">
+              <circle cx="600" cy="470" r="54" fill="rgba(0,0,0,.5)" stroke="url(#gm)" stroke-width="4"/>
+              <circle cx="600" cy="470" r="38" fill="none" stroke="url(#gm)" stroke-width="3"/>
+              <text id="ias-token" x="600" y="476" text-anchor="middle" fill="#ffd8f6" font-size="24" font-weight="900">IAS</text>
+              <text x="600" y="496" text-anchor="middle" fill="#ffc8f2" font-size="11">IA-SOLUTION Token</text>
+            </g>
+
+            <!-- ======= PATHS ======= -->
+            <path id="pDataMain" d="M125,75 L335,75 L545,75 L755,75 L965,75 L965,215"
+                  fill="none" stroke="url(#gc)" stroke-width="3" marker-end="url(#arrowC)" filter="url(#glowC)"/>
+            <path id="pExecOff" d="M965,215 C900,250 840,285 755,355"
+                  fill="none" stroke="url(#gc)" stroke-width="2.5" marker-end="url(#arrowC)" filter="url(#glowC)"/>
+            <path id="pExecOn" d="M965,215 C1005,260 1030,300 1045,355"
+                  fill="none" stroke="url(#gc)" stroke-width="2.5" marker-end="url(#arrowC)" filter="url(#glowC)"/>
+            <path id="pValueOff" d="M755,355 L545,355"
+                  fill="none" stroke="url(#gm)" stroke-width="3" marker-end="url(#arrowM)" filter="url(#glowM)"/>
+            <path id="pValueOn" d="M1045,355 C930,355 700,355 545,355"
+                  fill="none" stroke="url(#gm)" stroke-width="3" marker-end="url(#arrowM)" filter="url(#glowM)"/>
+            <path id="pToIAS" d="M545,355 C555,395 575,430 600,470"
+                  fill="none" stroke="url(#gm)" stroke-width="3" marker-end="url(#arrowM)" filter="url(#glowM)"/>
+
+            <!-- ======= PARTICLES ======= -->
+            <circle r="5" fill="#cfffff"><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath xlink:href="#pDataMain"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" dur="6s" repeatCount="indefinite"/></circle>
+            <circle r="4" fill="#cfffff"><animateMotion dur="4.5s" begin="1.2s" repeatCount="indefinite" rotate="auto"><mpath xlink:href="#pExecOff"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" dur="4.5s" begin="1.2s" repeatCount="indefinite"/></circle>
+            <circle r="4" fill="#cfffff"><animateMotion dur="4.5s" begin=".6s" repeatCount="indefinite" rotate="auto"><mpath xlink:href="#pExecOn"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" dur="4.5s" begin=".6s" repeatCount="indefinite"/></circle>
+            <circle r="5" fill="#ffd3f5"><animateMotion dur="3.6s" begin="0s" repeatCount="indefinite" rotate="auto"><mpath xlink:href="#pValueOff"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" dur="3.6s" repeatCount="indefinite"/></circle>
+            <circle r="5" fill="#ffd3f5"><animateMotion dur="3.8s" begin="1s" repeatCount="indefinite" rotate="auto"><mpath xlink:href="#pValueOn"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" dur="3.8s" begin="1s" repeatCount="indefinite"/></circle>
+            <circle r="6" fill="#ffe6fb"><animateMotion dur="2.8s" begin=".8s" repeatCount="indefinite" rotate="auto"><mpath xlink:href="#pToIAS"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" dur="2.8s" begin=".8s" repeatCount="indefinite"/></circle>
+
+            <style>
+              @media (prefers-reduced-motion: reduce){
+                circle[fill="#cfffff"], circle[fill="#ffd3f5"], circle[fill="#ffe6fb"]{display:none}
+              }
+            </style>
+          </svg>
         </div>
 
-        <div class="bg-white/5 p-6 rounded-xl border border-white/10 mt-8">
-          <h3 class="text-lg font-semibold mb-2">Distribution type (exemple)</h3>
-          <div class="grid md:grid-cols-4 gap-4 text-sm text-white/70">
-            <div class="p-3 rounded-lg bg-white/5 border border-white/10"><span class="block font-semibold text-white">Rewards créateurs/partenaires</span><span>p.ex. 40%</span></div>
-            <div class="p-3 rounded-lg bg-white/5 border border-white/10"><span class="block font-semibold text-white">Trésorerie protocolaire</span><span>p.ex. 30%</span></div>
-            <div class="p-3 rounded-lg bg-white/5 border border-white/10"><span class="block font-semibold text-white">Liquidité / MM</span><span>p.ex. 20%</span></div>
-            <div class="p-3 rounded-lg bg-white/5 border border-white/10"><span class="block font-semibold text-white">Burn (optionnel)</span><span>p.ex. 10%</span></div>
-          </div>
-          <p class="text-xs text-white/60 mt-3">Exemple indicatif non contractuel. Les paramètres exacts sont définis par la gouvernance et peuvent évoluer.</p>
+        <div class="mt-4 flex flex-wrap justify-center gap-2">
+          <span class="chip">Flux data <span class="ml-1 text-cyan-300">●</span></span>
+          <span class="chip">Flux valeur → IAS <span class="ml-1 text-pink-300">●</span></span>
+          <span class="chip">Buyback / Émission contrôlée</span>
         </div>
       </div>
     </section>
@@ -365,33 +337,33 @@
       <div class="mx-auto max-w-7xl px-6">
         <h2 class="text-3xl font-bold text-center mb-3">Tokenomics — <span class="title-grad">IAS</span></h2>
         <p class="text-center text-white/70 max-w-3xl mx-auto mb-12">
-          <b>IAS</b> (IA-SOLUTION Token) aligne l’usage d’Autopilot avec la création de valeur: utility, paiements internes, gouvernance, et éventuellement buyback/burn.
+          <b>IAS</b> aligne l’usage d’Autopilot avec la création de valeur: utility, paiements internes, gouvernance, et capture via buyback/burn.
         </p>
 
         <div class="grid md:grid-cols-3 gap-6">
           <div class="bg-white/5 p-6 rounded-xl border border-white/10">
             <h3 class="text-xl font-bold mb-2">Utility</h3>
             <ul class="list-disc list-inside text-white/70 space-y-1">
-              <li>Accès modules premium & quotas API.</li>
-              <li>Réduction de frais via staking/verrouillage.</li>
-              <li>Collateral de SLA (priorité tâches critiques).</li>
-              <li>Gouvernance: paramètres, intégrations, schedules.</li>
+              <li>Accès modules premium & quotas API</li>
+              <li>Réduction de frais via staking/verrouillage</li>
+              <li>Collateral de SLA (priorité tâches critiques)</li>
+              <li>Gouvernance: paramètres, intégrations, schedules</li>
             </ul>
           </div>
           <div class="bg-white/5 p-6 rounded-xl border border-white/10">
             <h3 class="text-xl font-bold mb-2">Demand Drivers</h3>
             <ul class="list-disc list-inside text-white/70 space-y-1">
-              <li>+ d’exécutions Autopilot → + de frais/valeur routés vers IAS.</li>
-              <li>Intégrations partenaires & réseaux.</li>
-              <li>Récompenses corrélées à l’impact mesuré (pas au volume brut).</li>
+              <li>+ d’exécutions Autopilot → + de valeur routée vers IAS</li>
+              <li>Intégrations partenaires & réseau</li>
+              <li>Récompenses corrélées à l’impact mesuré</li>
             </ul>
           </div>
           <div class="bg-white/5 p-6 rounded-xl border border-white/10">
             <h3 class="text-xl font-bold mb-2">Risk Policy</h3>
             <ul class="list-disc list-inside text-white/70 space-y-1">
-              <li>Pas de promesse d’investissement. Paramètres votés.</li>
-              <li>Transparence: revenus incrémentaux, taux de routage, burn.</li>
-              <li>Garde-fous: plafonds d’émission, oracles, audits.</li>
+              <li>Pas de promesse d’investissement</li>
+              <li>Transparence: revenus incrémentaux / burn</li>
+              <li>Plafonds d’émission, oracles, audits</li>
             </ul>
           </div>
         </div>
@@ -404,18 +376,9 @@
         <h2 class="text-3xl font-bold text-center mb-3">Cas d’usage</h2>
         <p class="text-center text-white/70 max-w-3xl mx-auto mb-12">L’Autopilot ne “raconte” pas la valeur — il l’exécute, la mesure et la route.</p>
         <div class="grid md:grid-cols-3 gap-6">
-          <div class="bg-white/5 p-6 rounded-xl border border-white/10">
-            <h3 class="font-semibold mb-2">Acquisition & Ads</h3>
-            <p class="text-sm text-white/70">Optim budget cross-canal (bandits), pause créas à faible uplift, enchères dynamiques, MTA signé.</p>
-          </div>
-          <div class="bg-white/5 p-6 rounded-xl border border-white/10">
-            <h3 class="font-semibold mb-2">Rétention & Pricing</h3>
-            <p class="text-sm text-white/70">Propension-à-acheter, churn scoring, promos ciblées, tests multi-bras, CLV-aware.</p>
-          </div>
-          <div class="bg-white/5 p-6 rounded-xl border border-white/10">
-            <h3 class="font-semibold mb-2">On-chain Automations</h3>
-            <p class="text-sm text-white/70">Oracles d’événements, exécutions conditionnelles, micro-rewards IAS selon impact prouvé.</p>
-          </div>
+          <div class="bg-white/5 p-6 rounded-xl border border-white/10"><h3 class="font-semibold mb-2">Acquisition & Ads</h3><p class="text-sm text-white/70">Optim budget cross-canal (bandits), pause créas à faible uplift, enchères dynamiques, MTA signé.</p></div>
+          <div class="bg-white/5 p-6 rounded-xl border border-white/10"><h3 class="font-semibold mb-2">Rétention & Pricing</h3><p class="text-sm text-white/70">Propension-à-acheter, churn scoring, promos ciblées, tests multi-bras, CLV-aware.</p></div>
+          <div class="bg-white/5 p-6 rounded-xl border border-white/10"><h3 class="font-semibold mb-2">On-chain Automations</h3><p class="text-sm text-white/70">Oracles d’événements, exécutions conditionnelles, micro-rewards IAS selon impact prouvé.</p></div>
         </div>
       </div>
     </section>
@@ -425,55 +388,26 @@
       <div class="mx-auto max-w-3xl px-6">
         <h2 class="text-3xl font-bold text-center mb-10">FAQ</h2>
         <div class="divide-y divide-white/10">
-          <!-- item -->
           <div class="py-3">
             <button class="faq-btn" aria-expanded="false">
               <span>Comment l’Autopilot “génère” concrètement du IAS ?</span>
               <svg class="faq-icon transition-transform" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
             </button>
-            <div class="faq-a">
-              <div class="pb-5 text-white/70">Soit via <b>buyback</b> (frais d’usage convertis en IAS), soit via une <b>émission contrôlée</b> corrélée à la valeur nette créée. Les paramètres (taux, répartition, éventuel burn) sont gouvernés et transparents.</div>
-            </div>
+            <div class="faq-a"><div class="pb-5 text-white/70">Via <b>buyback</b> (frais d’usage convertis en IAS) ou via une <b>émission contrôlée</b> corrélée à la valeur nette créée. Paramètres (taux, répartition, burn) gouvernés et transparents.</div></div>
           </div>
-          <!-- item -->
           <div class="py-3">
             <button class="faq-btn" aria-expanded="false">
               <span>Qu’est-ce qui empêche le “farm” artificiel de rewards ?</span>
               <svg class="faq-icon transition-transform" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
             </button>
-            <div class="faq-a">
-              <div class="pb-5 text-white/70">Attribution incrémentale (uplift) et oracles d’événements limitent la subvention de volume non-incrémental. <b>Plafonds</b> + <b>pénalités</b> en cas d’anomalies (sybil/drift).</div>
-            </div>
+            <div class="faq-a"><div class="pb-5 text-white/70">Attribution incrémentale (uplift) + oracles d’événements limitent la subvention de volume non-incrémental. <b>Plafonds</b> + <b>pénalités</b> en cas d’anomalies (sybil/drift).</div></div>
           </div>
-          <!-- item -->
           <div class="py-3">
             <button class="faq-btn" aria-expanded="false">
               <span>Pourquoi un token et pas juste une facture SaaS ?</span>
               <svg class="faq-icon transition-transform" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
             </button>
-            <div class="faq-a">
-              <div class="pb-5 text-white/70">Le token <b>aligne</b> créateurs, opérateurs et partenaires : utility (accès, SLA), gouvernance, et capture (buyback/burn) lorsque la valeur est effectivement créée.</div>
-            </div>
-          </div>
-          <!-- item existant -->
-          <div class="py-3">
-            <button class="faq-btn" aria-expanded="false">
-              <span>Comment fonctionne l’Autopilot ?</span>
-              <svg class="faq-icon transition-transform" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
-            </button>
-            <div class="faq-a">
-              <div class="pb-5 text-white/70">L'Autopilot utilise l'IA pour automatiser et optimiser les processus de génération de revenus : ingestion → scoring → décision → exécution → mesure.</div>
-            </div>
-          </div>
-          <!-- item existant -->
-          <div class="py-3">
-            <button class="faq-btn" aria-expanded="false">
-              <span>Quelle est l'utilité du token IAS ?</span>
-              <svg class="faq-icon transition-transform" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
-            </button>
-            <div class="faq-a">
-              <div class="pb-5 text-white/70">IAS sert à l’accès premium, à la gouvernance, à la réduction de frais via staking/verrouillage, et potentiellement à capturer une partie de la valeur via buyback/burn.</div>
-            </div>
+            <div class="faq-a"><div class="pb-5 text-white/70">Le token <b>aligne</b> créateurs, opérateurs et partenaires : utility (accès, SLA), gouvernance, et capture (buyback/burn) lorsque la valeur est effectivement créée.</div></div>
           </div>
         </div>
       </div>
@@ -491,246 +425,77 @@
               <div class="flex flex-wrap gap-3">
                 <a target="_blank" rel="noopener" href="https://www.linkedin.com/"
                    class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-semibold text-[#08121b]
-                   bg-gradient-to-r from-cyan to-mag shadow-[0_10px_30px_rgba(0,242,255,.2),0_14px_40px_rgba(255,47,208,.15)]
+                   bg-gradient-to-r from-cyan-400 to-fuchsia-500 shadow-[0_10px_30px_rgba(0,242,255,.2),0_14px_40px_rgba(255,47,208,.15)]
                    hover:brightness-110 transition">DM LinkedIn</a>
-                <a href="mailto:contact@ia-solution.fr"
-                   class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-semibold border border-white/10 bg-white/5 hover:bg-white/10 transition">
-                   contact@ia-solution.fr</a>
-              </div>
-
-              <button id="copy-teaser" class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition">
-                <span>Copier le teaser</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                </svg>
-              </button>
-              <p id="teaser" class="sr-only">
-                Autopilot → transforme data & trafic en revenus. La valeur circule via IAS (IA-SOLUTION Token).
-                Plus Autopilot tourne, plus la demande IAS monte. DM pour deck privé & démo.
-              </p>
-            </div>
-
-            <form class="grid gap-4" onsubmit="event.preventDefault()">
-              <div>
-                <label for="email" class="block text-sm mb-2">Email</label>
-                <input id="email" type="email" required
-                  class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-cyan"
-                  placeholder="vous@domaine.fr" />
-              </div>
-              <div>
-                <label for="msg" class="block text-sm mb-2">Message</label>
-                <textarea id="msg" rows="4"
-                  class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-cyan"
-                  placeholder="Quelques lignes sur votre besoin…"></textarea>
-              </div>
-              <button class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-semibold text-[#08121b]
-                 bg-gradient-to-r from-cyan to-mag shadow-[0_10px_30px_rgba(0,242,255,.2),0_14px_40px_rgba(255,47,208,.15)]
-                 hover:brightness-110 transition">Envoyer</button>
-              <p class="text-xs text-white/60">⚖️ Ce site n’est pas une offre d’investissement. Informations indicatives susceptibles d’évoluer.</p>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
-
-  <!-- Footer -->
-  <footer class="py-10 border-t border-white/10">
-    <div class="mx-auto max-w-7xl px-6 text-center text-white/60 text-sm">
-      <p class="mb-2">IAS Autopilot — AI + Web3 Revenue Engine</p>
-      <p>© <span id="y"></span> IA-SOLUTION — Tous droits réservés</p>
-    </div>
-  </footer>
-
-  <script>
-    // Animation du flux de données
-    document.addEventListener('DOMContentLoaded', () => {
-      // Création des particules de flux de données améliorée
-      function createDataFlow() {
-        const flowContainer = document.getElementById('dataFlow');
-        if (!flowContainer) return;
-        
-        // Fonction pour obtenir la position d'un élément
-        function getElementPosition(selector) {
-          const el = document.querySelector(selector);
-          if (!el) return { x: '50%', y: '50%' };
-          const rect = el.getBoundingClientRect();
-          return {
-            x: rect.left + rect.width/2 + 'px',
-            y: rect.top + rect.height/2 + 'px'
-          };
-        }
-        
-        // Création des particules
-        function createParticle() {
-          const particle = document.createElement('div');
-          particle.className = 'data-particle';
-          
-          // Position de départ (Autopilot)
-          const startPos = getElementPosition('#autopilot-logo');
-          // Position d'arrivée (IAS Token)
-          const endPos = getElementPosition('#ias-token');
-          
-          // Animation
-          particle.style.setProperty('--start-x', startPos.x);
-          particle.style.setProperty('--start-y', startPos.y);
-          particle.style.setProperty('--end-x', endPos.x);
-          particle.style.setProperty('--end-y', endPos.y);
-          
-          // Durée et délai
-          const duration = 1.5 + Math.random();
-          const delay = Math.random() * 3;
-          
-          particle.style.animation = `dataFlow ${duration}s ease-in-out ${delay}s forwards`;
-          
-          // Taille aléatoire
-          const size = 4 + Math.random() * 4;
-          particle.style.width = `${size}px`;
-          particle.style.height = `${size}px`;
-          
-          // Couleur aléatoire entre bleu et rose
-          const hue = 270 + Math.random() * 60; // Entre 270 et 330 (bleu à rose)
-          particle.style.background = `hsl(${hue}, 100%, 60%)`;
-          particle.style.boxShadow = `0 0 15px hsl(${hue}, 100%, 60%)`;
-          
-          flowContainer.appendChild(particle);
-          
-          // Suppression après l'animation
-          setTimeout(() => {
-            if (particle.parentNode === flowContainer) {
-              particle.style.opacity = '0';
-              setTimeout(() => {
-                if (particle.parentNode === flowContainer) {
-                  flowContainer.removeChild(particle);
-                }
-              }, 500);
-            }
-          }, (duration + delay) * 1000);
-          
-          return particle;
-        }
-        
-        // Création continue de particules
-        let interval = setInterval(() => {
-          if (document.visibilityState === 'visible') {
-            createParticle();
-          }
-        }, 300);
-        
-        // Nettoyage lors du démontage
-        return () => clearInterval(interval);
-      }
-      
-      // Démarrer l'animation
-      createDataFlow();
-      const container = document.createElement('div');
-      container.className = 'connection-dots';
-      container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;';
-      document.body.appendChild(container);
-
-      // Création des points
-      for (let i = 0; i < 30; i++) {
-        const dot = document.createElement('div');
-        dot.style.cssText = `
-          position:absolute;
-          width:6px;height:6px;
-          background:#00f2ff;
-          border-radius:50%;
-          opacity:0.5;
-          animation:pulse 2s infinite alternate ${Math.random() * 2}s;
-          left:${Math.random() * 100}%;
-          top:${Math.random() * 100}%;
-        `;
-        container.appendChild(dot);
-      }
-
-      // Ajout du style pour l'animation
-      const style = document.createElement('style');
-      style.textContent = `
-        @keyframes pulse {
-          0% { transform:scale(1); opacity:0.2; }
-          100% { transform:scale(1.5); opacity:0.8; }
-        }
-        .animate-on-scroll {
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .animate-on-scroll.animate-fade-in {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      `;
-      document.head.appendChild(style);
-
-      // Animation au défilement
-      const animateOnScroll = () => {
-        const elements = document.querySelectorAll('.animate-on-scroll');
-        elements.forEach(el => {
-          const rect = el.getBoundingClientRect();
-          const isVisible = (rect.top <= window.innerHeight * 0.8);
-          if (isVisible) el.classList.add('animate-fade-in');
-        });
-      };
-      window.addEventListener('scroll', animateOnScroll);
-      animateOnScroll();
-    });
-    // year
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    // mobile menu
-    (function(){
-      const btn = document.getElementById('menu-btn');
-      const menu = document.getElementById('menu');
-      if(!btn || !menu) return;
-      const close = ()=>{ menu.classList.add('hidden'); btn.setAttribute('aria-expanded','false'); };
-      btn.addEventListener('click', (e)=> {
-        e.stopPropagation();
-        const open = menu.classList.toggle('hidden');
-        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      });
-      document.addEventListener('click', (e)=> {
-        if(!menu.contains(e.target) && !btn.contains(e.target)) close();
-      });
-      document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') close(); });
-    })();
-
-    // FAQ toggle (accessible)
-    document.querySelectorAll('#faq .faq-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const expanded = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!expanded));
-        const item = btn.closest('div.py-3');
-        if(!item) return;
-        item.classList.toggle('faq-open', !expanded);
-        const icon = btn.querySelector('.faq-icon');
-        if(icon) icon.style.transform = !expanded ? 'rotate(180deg)' : 'rotate(0deg)';
-      });
-    });
-
-    // Copy teaser
-    (function(){
-      const btn = document.getElementById('copy-teaser');
-      const teaser = document.getElementById('teaser');
-      if(!btn || !teaser) return;
-      btn.addEventListener('click', async ()=>{
-        try{
-          await navigator.clipboard.writeText(teaser.textContent.trim());
-          const span = btn.querySelector('span');
-          const old = span.textContent;
-          span.textContent = 'Copié ✔';
-          setTimeout(()=> span.textContent = old, 1200);
         }catch(_){}
       });
     })();
 
-    // prefers-reduced-motion: remove potential animation classes (defensive)
+    // Respect reduced motion (désactive éventuels animate CSS globaux)
     (function(){
       const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
       if(mq.matches){
-        document.querySelectorAll('.animate-pulse,.animate-bounce,.animate-spin').forEach(n=>n.classList.remove('animate-pulse','animate-bounce','animate-spin'));
+        document.querySelectorAll('.animate-pulse,.animate-bounce,.animate-spin')
+          .forEach(n=>n.classList.remove('animate-pulse','animate-bounce','animate-spin'));
       }
     })();
+  </script>
+  
+  <script>
+    // Animation de flux de données
+    document.addEventListener('DOMContentLoaded', () => {
+      const flow = document.getElementById('dataFlow');
+      if (!flow) return;
+      
+      function createParticle() {
+        const start = document.querySelector('#autopilot-logo');
+        const end = document.querySelector('#ias-token');
+        if (!start || !end) return;
+        
+        const particle = document.createElement('div');
+        particle.className = 'data-particle';
+        
+        const startRect = start.getBoundingClientRect();
+        const endRect = end.getBoundingClientRect();
+        
+        const startX = startRect.left + startRect.width/2;
+        const startY = startRect.top + startRect.height/2;
+        const endX = endRect.left + endRect.width/2;
+        const endY = endRect.top + endRect.height/2;
+        
+        // Position initiale
+        particle.style.left = `${startX}px`;
+        particle.style.top = `${startY}px`;
+        
+        // Ajout au DOM
+        flow.appendChild(particle);
+        
+        // Délai aléatoire pour un effet plus naturel
+        const delay = Math.random() * 1000;
+        
+        // Démarrage de l'animation après un court délai
+        setTimeout(() => {
+          particle.style.opacity = '1';
+          particle.style.transform = `translate(${endX - startX}px, ${endY - startY}px)`;
+          
+          // Nettoyage après l'animation
+          setTimeout(() => {
+            if (particle.parentNode === flow) {
+              flow.removeChild(particle);
+            }
+          }, 1500);
+        }, 100);
+      }
+      
+      // Démarrer l'animation
+      setInterval(createParticle, 500);
+      
+      // Créer quelques particules initiales
+      for (let i = 0; i < 3; i++) {
+        setTimeout(createParticle, i * 300);
+      }
+    });
   </script>
 </body>
 </html>
