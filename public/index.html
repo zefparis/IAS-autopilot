@@ -2,21 +2,60 @@
 <html lang="fr">
 <head>
   <style>
-    /* Animation des circuits imprimés */
-    .circuit-bg {
-      position: fixed;
+    /* Animation de flux de données améliorée */
+    .data-flow {
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -1;
-      opacity: 0.1;
-      background: 
-        linear-gradient(90deg, #0a0f14 2px, transparent 1%) center,
-        linear-gradient(#0a0f14 2px, transparent 1%) center,
-        #00f2ff;
-      background-size: 4rem 4rem;
-      animation: circuitMove 40s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+      overflow: visible;
+    }
+    
+    .data-particle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #00f2ff;
+      border-radius: 50%;
+      opacity: 0;
+      filter: drop-shadow(0 0 10px #00f2ff);
+      z-index: 1;
+    }
+    
+    .data-particle::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #00f2ff;
+      border-radius: 50%;
+      animation: pulse 1s infinite;
+    }
+    
+    @keyframes dataFlow {
+      0% { 
+        transform: translate(var(--start-x), var(--start-y)) scale(0.5);
+        opacity: 0;
+      }
+      10% { 
+        opacity: 1;
+        transform: translate(var(--start-x), var(--start-y)) scale(1);
+      }
+      90% { 
+        opacity: 1;
+      }
+      100% { 
+        transform: translate(var(--end-x), var(--end-y)) scale(1.2);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(2.5); opacity: 0; }
     }
 
     @keyframes circuitMove {
@@ -94,15 +133,14 @@
   </style>
 </head>
 <body class="min-h-screen font-sans antialiased selection:bg-cyan/20 selection:text-white relative overflow-hidden">
-  <!-- Arrière-plan animé -->
-  <div class="circuit-bg"></div>
-  <div class="laser-scan"></div>
+  <!-- Animation de flux de données -->
+  <div class="data-flow" id="dataFlow"></div>
   <!-- Header -->
   <header class="sticky top-0 z-50 bg-black/60 backdrop-blur border-b border-white/10">
     <div class="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
       <a href="#top" class="flex items-center gap-2" aria-label="Accueil IAS">
         <!-- inline logo -->
-        <svg class="w-9 h-9" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <svg id="autopilot-logo" class="w-9 h-9" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stop-color="#ff2fd0"/><stop offset="100%" stop-color="#00f2ff"/>
@@ -267,7 +305,7 @@
             <g transform="translate(800,44)" filter="url(#soft)">
               <circle cx="120" cy="120" r="95" fill="none" stroke="url(#g-mag)" stroke-width="4"/>
               <circle cx="120" cy="120" r="70" fill="none" stroke="url(#g-mag)" stroke-width="3"/>
-              <text x="120" y="128" text-anchor="middle" fill="#ffd8f6" font-size="44" font-weight="900">IAS</text>
+              <text id="ias-token" x="120" y="128" text-anchor="middle" fill="#ffd8f6" font-size="44" font-weight="900">IAS</text>
               <text x="120" y="158" text-anchor="middle" fill="#ffc8f2" font-size="13">IA-SOLUTION Token</text>
             </g>
           </svg>
@@ -505,8 +543,86 @@
   </footer>
 
   <script>
-    // Animation des points de connexion
+    // Animation du flux de données
     document.addEventListener('DOMContentLoaded', () => {
+      // Création des particules de flux de données améliorée
+      function createDataFlow() {
+        const flowContainer = document.getElementById('dataFlow');
+        if (!flowContainer) return;
+        
+        // Fonction pour obtenir la position d'un élément
+        function getElementPosition(selector) {
+          const el = document.querySelector(selector);
+          if (!el) return { x: '50%', y: '50%' };
+          const rect = el.getBoundingClientRect();
+          return {
+            x: rect.left + rect.width/2 + 'px',
+            y: rect.top + rect.height/2 + 'px'
+          };
+        }
+        
+        // Création des particules
+        function createParticle() {
+          const particle = document.createElement('div');
+          particle.className = 'data-particle';
+          
+          // Position de départ (Autopilot)
+          const startPos = getElementPosition('#autopilot-logo');
+          // Position d'arrivée (IAS Token)
+          const endPos = getElementPosition('#ias-token');
+          
+          // Animation
+          particle.style.setProperty('--start-x', startPos.x);
+          particle.style.setProperty('--start-y', startPos.y);
+          particle.style.setProperty('--end-x', endPos.x);
+          particle.style.setProperty('--end-y', endPos.y);
+          
+          // Durée et délai
+          const duration = 1.5 + Math.random();
+          const delay = Math.random() * 3;
+          
+          particle.style.animation = `dataFlow ${duration}s ease-in-out ${delay}s forwards`;
+          
+          // Taille aléatoire
+          const size = 4 + Math.random() * 4;
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+          
+          // Couleur aléatoire entre bleu et rose
+          const hue = 270 + Math.random() * 60; // Entre 270 et 330 (bleu à rose)
+          particle.style.background = `hsl(${hue}, 100%, 60%)`;
+          particle.style.boxShadow = `0 0 15px hsl(${hue}, 100%, 60%)`;
+          
+          flowContainer.appendChild(particle);
+          
+          // Suppression après l'animation
+          setTimeout(() => {
+            if (particle.parentNode === flowContainer) {
+              particle.style.opacity = '0';
+              setTimeout(() => {
+                if (particle.parentNode === flowContainer) {
+                  flowContainer.removeChild(particle);
+                }
+              }, 500);
+            }
+          }, (duration + delay) * 1000);
+          
+          return particle;
+        }
+        
+        // Création continue de particules
+        let interval = setInterval(() => {
+          if (document.visibilityState === 'visible') {
+            createParticle();
+          }
+        }, 300);
+        
+        // Nettoyage lors du démontage
+        return () => clearInterval(interval);
+      }
+      
+      // Démarrer l'animation
+      createDataFlow();
       const container = document.createElement('div');
       container.className = 'connection-dots';
       container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;';
