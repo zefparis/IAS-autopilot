@@ -299,345 +299,36 @@
 
     <!-- ========== NEON FLOW v2: Scrapers → Blockchain → IAS ========== -->
     <section id="neon-flow" class="py-20 border-t border-white/10">
-      <style>
-        /* ----- styles scoped à #neon-flow ----- */
-        #neon-flow .panel { 
-          border-radius: 14px; 
-          background: rgba(255,255,255,.045); 
-          border: 1px solid rgba(255,255,255,.10);
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        #neon-flow .panel::-webkit-scrollbar {
-          display: none;
-        }
-        
-        /* Filtres interactifs */
-        #neon-flow .filters {
-          display: flex;
-          justify-content: center;
-          flex-wrap: wrap;
-          gap: 8px;
-          margin-bottom: 1.5rem;
-        }
-        #neon-flow .filter-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          padding: 0.5rem 1rem;
-          border-radius: 9999px;
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          background: rgba(0, 0, 0, 0.6);
-          color: rgba(255, 255, 255, 0.9);
-          padding: 0.5rem 1rem;
-          border-radius: 9999px;
-          font-size: 0.875rem;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          backdrop-filter: blur(4px);
-        }
-        #neon-flow .filter-btn[aria-pressed="true"] {
-          border-color: currentColor;
-          color: white;
-        }
-        #neon-flow .filter-btn[data-filter="data"] { --color: #00f2ff; }
-        #neon-flow .filter-btn[data-filter="actions"] { --color: #66ffcc; }
-        #neon-flow .filter-btn[data-filter="value"] { --color: #ff2fd0; }
-        #neon-flow .filter-btn[aria-pressed="true"] {
-          background: var(--color);
-          color: #0a0f14;
-          box-shadow: 0 0 12px var(--color);
-        }
-        #neon-flow .filter-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: var(--color);
-        }
-        
-        /* Styles pour les groupes de flux */
-        #neon-flow .g-data { --color: #00f2ff; }
-        #neon-flow .g-actions { --color: #66ffcc; }
-        #neon-flow .g-value { --color: #ff2fd0; }
-        
-        /* Réduire les animations si demandé */
-        @media (prefers-reduced-motion: reduce) {
-          #neon-flow [class*="animate-"],
-          #neon-flow .motion {
-            display: none !important;
-          }
-        }
-      </style>
-      
       <div class="container mx-auto px-6">
         <h2 class="text-3xl font-bold text-center mb-3">
-          Flux néon — de <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-fuchsia-500">Scrapers</span>
-          jusqu'à <span class="bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-cyan-400">IAS</span>
+          Flux néon — de
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-fuchsia-500">Scrapers</span>
+          jusqu'à
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-cyan-400">IAS</span>
         </h2>
         <p class="text-center text-white/70 max-w-3xl mx-auto mb-10">
-          Ingest → Score → Decide → Act → Measure. Off-chain & on-chain, routage de valeur via <b>buyback</b> / <b>émission contrôlée</b> → <b>IAS</b>.
+          Ingest → Score → Decide → Act → Measure. Exécution off-chain & on-chain,
+          routage de valeur via <b>buyback</b> / <b>émission contrôlée</b> → <b>IAS</b>.
         </p>
-        
-        <!-- Filtres interactifs -->
-        <div class="filters">
-          <button class="filter-btn" data-filter="data" aria-pressed="true">
-            <span class="filter-dot"></span>
-            <span>Data / Ops</span>
-          </button>
-          <button class="filter-btn" data-filter="actions" aria-pressed="true">
-            <span class="filter-dot"></span>
-            <span>Décisions / Actions</span>
-          </button>
-          <button class="filter-btn" data-filter="value" aria-pressed="true">
-            <span class="filter-dot"></span>
-            <span>Valeur → IAS</span>
-          </button>
-          <button class="chip" type="button" data-filter="none" aria-pressed="true" title="Réinitialiser l'emphase">
-            Tout
-          </button>
-        </div>
 
-        <div class="panel p-3 overflow-x-auto">
-          <!-- SVG responsive -->
-          <svg id="neon-svg" viewBox="0 0 1200 560" class="w-full h-auto" role="img" aria-label="Pipeline Scrapers vers IAS">
-            <!-- ========== defs ========== -->
-            <defs>
-              <!-- color tokens -->
-              <linearGradient id="c-cyan" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#00f2ff"/><stop offset="100%" stop-color="#7af9ff"/>
-              </linearGradient>
-              <linearGradient id="c-mint" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#66ffcc"/><stop offset="100%" stop-color="#a6ffd8"/>
-              </linearGradient>
-              <linearGradient id="c-mag" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#ff2fd0"/><stop offset="100%" stop-color="#ff9be9"/>
-              </linearGradient>
+        <figure class="rounded-xl border border-white/10 bg-white/5 p-3 overflow-x-auto">
+          <img
+            src="/assets/ias-neon-flow-v2.svg"
+            alt="Pipeline Scrapers → ETL → Feature Store → Modèles → Policy → Exécuteur → Off-chain & On-chain → Controller → IAS (avec boucle de feedback)."
+            class="w-full h-auto"
+            decoding="async"
+            loading="lazy"
+          />
+          <figcaption class="sr-only">
+            Data/ML (cyan), exécution on/off-chain (menthe), routage de valeur vers IAS (magenta), feedback vers modèles (pointillé).
+          </figcaption>
+        </figure>
 
-              <!-- subtle glows -->
-              <filter id="glow-c" x="-40%" y="-40%" width="180%" height="180%">
-                <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#00f2ff" flood-opacity=".5"/>
-              </filter>
-              <filter id="glow-m" x="-40%" y="-40%" width="180%" height="180%">
-                <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#66ffcc" flood-opacity=".45"/>
-              </filter>
-              <filter id="glow-mag" x="-40%" y="-40%" width="180%" height="180%">
-                <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#ff2fd0" flood-opacity=".6"/>
-              </filter>
-
-              <!-- tiny arrows (don't overlap labels) -->
-              <marker id="arr-c" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-                <path d="M0,0 L0,10 L10,5 z" fill="#7af9ff" opacity=".9"/>
-              </marker>
-              <marker id="arr-m" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-                <path d="M0,0 L0,10 L10,5 z" fill="#a6ffd8" opacity=".9"/>
-              </marker>
-              <marker id="arr-mag" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-                <path d="M0,0 L0,10 L10,5 z" fill="#ff9be9" opacity=".95"/>
-              </marker>
-
-              <!-- background grid -->
-              <pattern id="grid-40" width="40" height="40" patternUnits="userSpaceOnUse">
-                <rect width="40" height="40" fill="rgba(10,20,30,.65)"/>
-                <path d="M40 0 H0 M0 0 V40" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
-              </pattern>
-            </defs>
-
-            <!-- background -->
-            <rect x="0" y="0" width="1200" height="560" fill="url(#grid-40)"/>
-
-            <!-- ========== nodes ========== -->
-            <g font-size="13" font-weight="700" text-rendering="geometricPrecision">
-              <!-- top row (ingest/ML/policy) -->
-              <!-- top row (ingest/ML/policy) -->
-              <g filter="url(#glow-c)">
-                <rect x="40" y="60" rx="14" width="180" height="72" fill="rgba(0,10,16,.6)" stroke="url(#c-cyan)" stroke-width="2.5"/>
-                <text x="130" y="98" text-anchor="middle" fill="#dffaff">Scrapers</text>
-                <text x="130" y="116" text-anchor="middle" fill="#97cfe3" font-size="11">Web / API</text>
-                <!-- output port -->
-                <circle cx="220" cy="96" r="4" fill="#7af9ff"/>
-              </g>
-
-              <g filter="url(#glow-c)">
-                <rect x="260" y="60" rx="14" width="180" height="72" fill="rgba(0,10,16,.6)" stroke="url(#c-cyan)" stroke-width="2.5"/>
-                <text x="350" y="98" text-anchor="middle" fill="#dffaff">ETL / Normalisation</text>
-                <text x="350" y="116" text-anchor="middle" fill="#97cfe3" font-size="11">clean → features</text>
-                <circle cx="440" cy="96" r="4" fill="#7af9ff"/>
-              </g>
-
-              <g filter="url(#glow-c)">
-                <rect x="480" y="60" rx="14" width="180" height="72" fill="rgba(0,10,16,.6)" stroke="url(#c-cyan)" stroke-width="2.5"/>
-                <text x="570" y="98" text-anchor="middle" fill="#dffaff">Feature Store</text>
-                <text x="570" y="116" text-anchor="middle" fill="#97cfe3" font-size="11">real-time / batch</text>
-                <circle xlink:href="#arr-c" x="660" y="96" r="4" fill="#7af9ff"/>
-              </g>
-
-              <g filter="url(#glow-c)">
-                <rect x="700" y="60" rx="14" width="180" height="72" fill="rgba(0,10,16,.6)" stroke="url(#c-cyan)" stroke-width="2.5"/>
-                <text x="790" y="96" text-anchor="middle" fill="#dffaff">Modèles & Scoring</text>
-                <text x="790" y="116" text-anchor="middle" fill="#97cfe3" font-size="11">Uplift / LTV</text>
-                <circle xlink:href="#arr-c" x="880" y="96" r="4" fill="#7af9ff"/>
-              </g>
-
-              <g filter="url(#glow-m)">
-                <rect x="920" y="60" rx="14" width="180" height="72" fill="rgba(0,10,16,.6)" stroke="url(#c-mint)" stroke-width="2.5"/>
-                <text x="1010" y="98" text-anchor="middle" fill="#e7ffee">Policy / Decision</text>
-                <text x="1010" y="116" text-anchor="middle" fill="#bdfbe4" font-size="11">ROI min / SLA</text>
-                <circle xlink:href="#arr-m" x="1010" y="132" r="4" fill="#a6ffd8"/>
-              </g>
-              
-              <!-- execution nodes -->
-              <g filter="url(#glow-m)">
-                <rect x="700" y="200" rx="14" width="180" height="72" fill="rgba(0,10,16,.6)" stroke="url(#c-mint)" stroke-width="2.5"/>
-                <text x="790" y="238" text-anchor="middle" fill="#e7ffee">Exécuteur</text>
-                <text x="790" y="256" text-anchor="middle" fill="#bdfbe4" font-size="11">On-chain / Off-chain</text>
-                <circle cx="700" cy="236" r="4" fill="#a6ffd8"/>
-                <circle cx="880" cy="236" r="4" fill="#a6ffd8"/>
-              </g>
-
-              <!-- controller -->
-              <g filter="url(#glow-mag)">
-                <rect x="480" y="360" rx="14" width="180" height="72" fill="rgba(0,10,16,.6)" stroke="url(#c-mag)" stroke-width="2.5"/>
-                <text x="570" y="398" text-anchor="middle" fill="#ffd7f5">Controller</text>
-                <text x="570" y="416" text-anchor="middle" fill="#e6a9d9" font-size="11">Orchestration</text>
-                <circle cx="570" y="440" r="4" fill="#ff9be9"/>
-              </g>
-
-              <!-- IAS token -->
-              <g id="ias-token-coin" filter="url(#glow-mag)">
-                <circle cx="680" cy="490" r="50" fill="#1a0a1a" stroke="url(#c-mag)" stroke-width="3"/>
-                <text x="680" y="490" text-anchor="middle" fill="#ff9be9" font-size="24" font-weight="800" dy=".3em">IAS</text>
-                <text x="680" y="520" text-anchor="middle" fill="#e6a9d9" font-size="11">Incentive Token</text>
-              </g>
-
-              <!-- paths -->
-              <g class="g-data">
-                <!-- main data flow -->
-                <path d="M220,96 H260" stroke="url(#c-cyan)" stroke-width="2" marker-end="url(#arr-c)"/>
-                <path d="M440,96 H480" stroke="url(#c-cyan)" stroke-width="2" marker-end="url(#arr-c)"/>
-                <path d="M660,96 H700" stroke="url(#c-cyan)" stroke-width="2" marker-end="url(#arr-c)"/>
-                <path d="M880,96 H920" stroke="url(#c-cyan)" stroke-width="2" marker-end="url(#arr-c)"/>
-                
-                <!-- policy to executor -->
-                <path d="M1010,132 V200 H880" stroke="url(#c-mint)" stroke-width="2" marker-end="url(#arr-m)" fill="none"/>
-                
-                <!-- executor to controller -->
-                <path d="M700,236 L610,360" stroke="url(#c-mint)" stroke-width="2" marker-end="url(#arr-m)" fill="none"/>
-                <path d="M880,236 C970,280 1030,310 1120,360" stroke="url(#c-mint)" stroke-width="2" marker-end="url(#arr-m)" fill="none"/>
-                
-                <!-- controller to IAS -->
-                <path d="M570,440 C615,465 650,485 680,490" stroke="url(#c-mag)" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arr-mag)" fill="none"/>
-              </g>
-
-              <!-- particles -->
-              <g class="g-data">
-                <!-- data flow particles -->
-                <circle r="3" fill="#7af9ff">
-                  <animateMotion dur="8s" repeatCount="indefinite" rotate="auto">
-                    <mpath xlink:href="#pathMain"/>
-                  </animateMotion>
-                  <animate attributeName="opacity" values="0;1;1;0" dur="8s" repeatCount="indefinite"/>
-                </circle>
-                
-                <!-- action flow particles -->
-                <circle r="3" fill="#a6ffd8">
-                  <animateMotion dur="12s" repeatCount="indefinite" rotate="auto" begin="2s">
-                    <mpath xlink:href="#pathExecOff"/>
-                  </animateMotion>
-                  <animate attributeName="opacity" values="0;1;1;0" dur="12s" repeatCount="indefinite" begin="2s"/>
-                </circle>
-                
-                <!-- value flow particles -->
-                <circle r="3" fill="#ff9be9">
-                  <animateMotion dur="15s" repeatCount="indefinite" rotate="auto" begin="4s">
-                    <mpath xlink:href="#pathToIAS"/>
-                  </animateMotion>
-                  <animate attributeName="opacity" values="0;1;1;0" dur="15s" repeatCount="indefinite" begin="4s"/>
-                </circle>
-              </g>
-            </g>
-          </svg>
-        </div>
-
-        <script>
-        // Toggle flow emphasis
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const filter = btn.dataset.filter;
-            const svg = document.getElementById('neon-svg');
-            
-            // Update active button
-            document.querySelectorAll('.filter-btn').forEach(b => b.setAttribute('aria-pressed', 'false'));
-            btn.setAttribute('aria-pressed', 'true');
-            
-            // Update SVG classes
-            svg.className = filter;
-          });
-        });
-        
-        // Initialize with data flow active
-        document.querySelector('.filter-btn[data-filter="data"]').click();
-        </script>
-        
-        <style>
-          @media (prefers-reduced-motion: reduce) {
-            #neon-svg .motion { display: none; }
-          }
-          
-          /* Filter button states */
-          .filter-btn[aria-pressed="true"] {
-            background: rgba(0, 0, 0, 0.7);
-            border-color: currentColor;
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
-            transform: translateY(-1px);
-          }
-          .filter-btn[data-filter="data"] { 
-            color: #00f2ff;
-            border-color: rgba(0, 242, 255, 0.5);
-          }
-          .filter-btn[data-filter="actions"] { 
-            color: #66ffcc;
-            border-color: rgba(102, 255, 204, 0.5);
-          }
-          .filter-btn[data-filter="value"] { 
-            color: #ff2fd0;
-            border-color: rgba(255, 47, 208, 0.5);
-          }
-          .filter-btn[aria-pressed="true"][data-filter="data"] {
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
-          }
-          .filter-btn[aria-pressed="true"][data-filter="actions"] {
-            box-shadow: 0 0 15px rgba(102, 255, 204, 0.4);
-          }
-          .filter-btn[aria-pressed="true"][data-filter="value"] {
-            box-shadow: 0 0 15px rgba(255, 47, 208, 0.4);
-          }
-          
-          /* Responsive adjustments */
-          @media (max-width: 768px) {
-            .filter-buttons { flex-wrap: wrap; gap: 8px; }
-            .filter-btn { padding: 6px 12px; font-size: 13px; }
-          }
-        </style>
-        </div>
-        
-        <style>
-          @media (prefers-reduced-motion: reduce) {
-            circle[fill="#cfffff"],
-            circle[fill="#ffd3f5"],
-            circle[fill="#ffe6fb"] {
-              display: none;
-            }
-          }
-        </style>
-
-        <div class="mt-4 flex flex-wrap justify-center gap-2">
-          <span class="chip">Flux data <span class="ml-1 text-cyan-300">●</span></span>
-          <span class="chip">Flux valeur → IAS <span class="ml-1 text-pink-300">●</span></span>
-          <span class="chip">Buyback / Émission contrôlée</span>
+        <div class="mt-4 flex flex-wrap gap-2 justify-center text-xs">
+          <span class="chip">Data/ML pipeline</span>
+          <span class="chip">Exécution on/off-chain</span>
+          <span class="chip">Buyback / Émission → IAS</span>
+          <span class="chip">Boucle de feedback</span>
         </div>
       </div>
     </section>
