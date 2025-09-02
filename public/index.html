@@ -311,18 +311,89 @@
           routage de valeur via <b>buyback</b> / <b>émission contrôlée</b> → <b>IAS</b>.
         </p>
 
-        <figure class="rounded-xl border border-white/10 bg-white/5 p-3 overflow-x-auto">
-          <img
-            src="/assets/ias-neon-flow-v2.svg"
-            alt="Pipeline Scrapers → ETL → Feature Store → Modèles → Policy → Exécuteur → Off-chain & On-chain → Controller → IAS (avec boucle de feedback)."
-            class="w-full h-auto"
-            decoding="async"
-            loading="lazy"
-          />
-          <figcaption class="sr-only">
-            Data/ML (cyan), exécution on/off-chain (menthe), routage de valeur vers IAS (magenta), feedback vers modèles (pointillé).
-          </figcaption>
-        </figure>
+        <div style="overflow-x:auto;width:100%;padding:1rem 0;">
+          <svg width="1440" height="800" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg" style="background:#14191e; max-width: 100%; height: auto; display: block; margin: 0 auto;">
+            <!-- AUTOPILOT chef -->
+            <g>
+              <circle cx="720" cy="70" r="36" fill="#10181E" stroke="#00f2ff" stroke-width="3"/>
+              <text x="720" y="75" text-anchor="middle" font-size="31" font-family="Segoe UI Emoji" fill="#fff">🧠</text>
+              <text x="720" y="116" text-anchor="middle" font-size="20" fill="#00f2ff" font-weight="bold">AUTOPILOT</text>
+            </g>
+            <path d="M720 110 L720 180" stroke="#00f2ff" stroke-width="2.5" marker-end="url(#arrowC)"/>
+            <defs>
+              <marker id="arrowC" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#00f2ff"/>
+              </marker>
+              <marker id="arrowM" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#ff2fd0"/>
+              </marker>
+            </defs>
+            <!-- PIPELINE -->
+            <!-- Scrapers -->
+            <g>
+              <rect x="90" y="180" rx="16" width="220" height="110" fill="#18232A" stroke="#00f2ff" stroke-width="3"/>
+              <text x="200" y="210" text-anchor="middle" font-size="22" fill="#eaf6ff" font-weight="bold">Scrapers</text>
+              <text x="200" y="235" text-anchor="middle" font-size="15" fill="#7af9ff">(Web/API)</text>
+              <text x="120" y="257" font-size="14" fill="#00f2ff">⚡ Scheduling</text>
+              <text x="120" y="277" font-size="14" fill="#00f2ff">🖱️ Clicks comptés</text>
+              <text x="240" y="257" font-size="14" fill="#00f2ff">👁️ Monitoring</text>
+              <text x="240" y="277" font-size="14" fill="#00f2ff">⏱️ Autoscale</text>
+            </g>
+            <path d="M310 235 L470 235" stroke="#00f2ff" stroke-width="3" marker-end="url(#arrowC)"/>
+            <!-- ETL -->
+            <g>
+              <rect x="470" y="180" rx="16" width="200" height="110" fill="#18232A" stroke="#00f2ff" stroke-width="3"/>
+              <text x="570" y="210" text-anchor="middle" font-size="21" fill="#bff8ff" font-weight="bold">ETL / Norm.</text>
+              <text x="570" y="240" text-anchor="middle" font-size="14" fill="#6bdae8">clean → features</text>
+            </g>
+            <path d="M670 235 L850 235" stroke="#00f2ff" stroke-width="3" marker-end="url(#arrowC)"/>
+            <!-- Feature Store -->
+            <g>
+              <rect x="850" y="180" rx="16" width="200" height="110" fill="#18232A" stroke="#00f2ff" stroke-width="3"/>
+              <text x="950" y="210" text-anchor="middle" font-size="21" fill="#bff8ff" font-weight="bold">Feature Store</text>
+              <text x="950" y="240" text-anchor="middle" font-size="14" fill="#6bdae8">real-time / batch</text>
+            </g>
+            <path d="M1050 235 L1260 235" stroke="#00f2ff" stroke-width="3" marker-end="url(#arrowC)"/>
+            <!-- Scoring -->
+            <g>
+              <rect x="1260" y="180" rx="16" width="220" height="110" fill="#18232A" stroke="#00f2ff" stroke-width="3"/>
+              <text x="1370" y="210" text-anchor="middle" font-size="21" fill="#bff8ff" font-weight="bold">Scoring / Models</text>
+              <text x="1370" y="240" text-anchor="middle" font-size="14" fill="#6bdae8">Uplift / LTV</text>
+            </g>
+            <!-- Policy / Decision sous scoring -->
+            <g>
+              <rect x="1260" y="370" rx="16" width="200" height="70" fill="#172d27" stroke="#66ffd8" stroke-width="2.2"/>
+              <text x="1360" y="410" text-anchor="middle" font-size="17" fill="#a8ffd8" font-weight="bold">Policy</text>
+              <text x="1360" y="430" text-anchor="middle" font-size="13" fill="#a8ffd8">ROI / SLA</text>
+            </g>
+            <path d="M1370 290 Q1370 340 1360 370" stroke="#66ffd8" stroke-width="2" marker-end="url(#arrowC)"/>
+            <!-- Exécuteur central -->
+            <g>
+              <rect x="600" y="420" rx="16" width="260" height="90" fill="#1b2631" stroke="#66ffd8" stroke-width="3"/>
+              <text x="730" y="460" text-anchor="middle" font-size="22" fill="#a8ffd8" font-weight="bold">Exécuteur</text>
+              <text x="730" y="485" text-anchor="middle" font-size="14" fill="#a8ffd8">On-chain / Off-chain</text>
+            </g>
+            <!-- Flèches scoring/policy → exécuteur -->
+            <path d="M1360 440 Q1100 465 860 465" stroke="#66ffd8" stroke-width="2.5" marker-end="url(#arrowC)"/>
+            <path d="M1370 290 Q1050 420 860 465" stroke="#66ffd8" stroke-width="2.2" marker-end="url(#arrowC)"/>
+            <!-- Controller -->
+            <g>
+              <rect x="780" y="600" rx="16" width="220" height="70" fill="#241824" stroke="#ff2fd0" stroke-width="2.5"/>
+              <text x="890" y="640" text-anchor="middle" font-size="20" fill="#ffd8f6" font-weight="bold">Controller</text>
+              <text x="890" y="662" text-anchor="middle" font-size="13" fill="#ffd8f6">Orchestration</text>
+            </g>
+            <!-- Flèche exécuteur → controller -->
+            <path d="M860 510 Q900 600 890 600" stroke="#ff2fd0" stroke-width="2.2" marker-end="url(#arrowM)"/>
+            <!-- IAS Token -->
+            <g>
+              <circle cx="1180" cy="710" r="36" fill="#1d0e19" stroke="#ff2fd0" stroke-width="5"/>
+              <circle cx="1180" cy="710" r="27" fill="none" stroke="#ffa1f1" stroke-width="2"/>
+              <text x="1180" y="723" text-anchor="middle" font-size="26" font-weight="bold" fill="#ffd8f6">IAS</text>
+              <text x="1180" y="742" text-anchor="middle" font-size="13" fill="#ffc8f2">Token</text>
+              <path d="M1000 670 Q1130 740 1155 723" stroke="#ff2fd0" stroke-width="2.6" fill="none" marker-end="url(#arrowM)"/>
+            </g>
+          </svg>
+        </div>
 
         <div class="mt-4 flex flex-wrap gap-2 justify-center text-xs">
           <span class="chip">Data/ML pipeline</span>
