@@ -189,169 +189,258 @@
       </div>
     </section>
 
-    <!-- NEON FLOW: Scraper -> Blockchain -> IAS -->
-<section id="neon-flow" class="py-20 border-t border-white/10">
-  <div class="container mx-auto px-6">
-    <h2 class="text-3xl font-bold text-center mb-3">
-      Flux néon — de <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-fuchsia-500">Scrapers</span>
-      jusqu’à <span class="bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-cyan-400">IAS</span>
-    </h2>
-    <p class="text-center text-white/70 max-w-3xl mx-auto mb-10">
-      Ingest → Score → Decide → Act → Measure. Exécution off-chain & on-chain, routage de valeur via
-      <b>buyback</b> / <b>émission contrôlée</b> → <b>IAS</b>.
-    </p>
+    <!-- ========== NEON FLOW: Scrapers → Blockchain → IAS ========== -->
+    <section id="neon-flow" class="py-20 border-t border-white/10">
+      <style>
+        /* ----- styles scoped à #neon-flow ----- */
+        #neon-flow .panel { border-radius: 14px; background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.10); }
+        #neon-flow .legend .chip { display:inline-flex; align-items:center; gap:.5rem; padding:.45rem .8rem; border-radius:999px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05); color:#a9c2d7; cursor:pointer }
+        #neon-flow .legend .chip .dot{width:8px;height:8px;border-radius:50%}
+        #neon-flow .legend .chip[aria-pressed="true"]{outline:2px solid rgba(255,255,255,.14); color:#eaf6ff}
 
-    <div class="rounded-xl border border-white/10 bg-white/5 p-3 overflow-x-auto">
-      <svg viewBox="0 0 1200 520" class="w-full h-auto" role="img"
-           aria-label="Pipeline Scrapers vers IAS via off-chain / on-chain">
-        <defs>
-          <linearGradient id="gc" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#00f2ff"/><stop offset="100%" stop-color="#7af9ff"/>
-          </linearGradient>
-          <linearGradient id="gm" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#ff2fd0"/><stop offset="100%" stop-color="#ff9be9"/>
-          </linearGradient>
-          <linearGradient id="ga" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#66ffcc"/><stop offset="100%" stop-color="#a6ffd8"/>
-          </linearGradient>
-          <filter id="glowC" x="-40%" y="-40%" width="180%" height="180%">
-            <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00f2ff" flood-opacity=".55"/>
-          </filter>
-          <filter id="glowM" x="-40%" y="-40%" width="180%" height="180%">
-            <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ff2fd0" flood-opacity=".55"/>
-          </filter>
-          <filter id="glowA" x="-40%" y="-40%" width="180%" height="180%">
-            <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#66ffcc" flood-opacity=".6"/>
-          </filter>
-          <marker id="arrowC" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
-            <path d="M0,0 L0,12 L12,6 z" fill="#7af9ff"/>
-          </marker>
-          <marker id="arrowM" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
-            <path d="M0,0 L0,12 L12,6 z" fill="#ff73de"/>
-          </marker>
-          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <rect width="40" height="40" fill="rgba(10,20,30,.6)"/>
-            <path d="M40 0 H0 M0 0 V40" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
-          </pattern>
-        </defs>
+        /* surbrillance par groupe */
+        #neon-flow svg .g-data     { transition:opacity .3s ease, filter .3s ease }
+        #neon-flow svg .g-actions  { transition:opacity .3s ease, filter .3s ease }
+        #neon-flow svg .g-value    { transition:opacity .3s ease, filter .3s ease }
 
-        <rect x="0" y="0" width="1200" height="520" fill="url(#grid)"/>
+        #neon-flow svg.active-data   .g-data    { opacity:1; filter:drop-shadow(0 0 12px rgba(0,242,255,.45)) }
+        #neon-flow svg.active-data   .g-actions,
+        #neon-flow svg.active-data   .g-value   { opacity:.25 }
 
-        <!-- NODES -->
-        <g font-size="14" font-weight="700">
-          <!-- Top row -->
-          <g filter="url(#glowC)"><!-- pas d'id ici pour éviter les doublons -->
-            <rect x="40" y="40" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#gc)" stroke-width="3"/>
-            <text x="125" y="75" text-anchor="middle" fill="#dffaff">Scrapers</text>
-            <text x="125" y="96" text-anchor="middle" fill="#96cde0" font-size="11">Web / API</text>
-          </g>
-          <g filter="url(#glowC)">
-            <rect x="250" y="40" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#gc)" stroke-width="3"/>
-            <text x="335" y="75" text-anchor="middle" fill="#dffaff">ETL / Normalisation</text>
-            <text x="335" y="96" text-anchor="middle" fill="#96cde0" font-size="11">clean → features</text>
-          </g>
-          <g filter="url(#glowC)">
-            <rect x="460" y="40" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#gc)" stroke-width="3"/>
-            <text x="545" y="75" text-anchor="middle" fill="#dffaff">Feature Store</text>
-            <text x="545" y="96" text-anchor="middle" fill="#96cde0" font-size="11">real-time / batch</text>
-          </g>
-          <g filter="url(#glowC)">
-            <rect x="670" y="40" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#gc)" stroke-width="3"/>
-            <text x="755" y="73" text-anchor="middle" fill="#dffaff">Modèles & Scoring</text>
-            <text x="755" y="95" text-anchor="middle" fill="#96cde0" font-size="11">Uplift / LTV</text>
-          </g>
-          <g filter="url(#glowA)">
-            <rect x="880" y="40" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#ga)" stroke-width="3"/>
-            <text x="965" y="75" text-anchor="middle" fill="#e7ffee">Policy / Decision</text>
-            <text x="965" y="96" text-anchor="middle" fill="#a8ffd8" font-size="11">ROI min / SLA</text>
-          </g>
-          <!-- Middle -->
-          <g filter="url(#glowA)">
-            <rect x="880" y="180" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#ga)" stroke-width="3"/>
-            <text x="965" y="215" text-anchor="middle" fill="#e7ffee">Exécuteurs</text>
-            <text x="965" y="236" text-anchor="middle" fill="#a8ffd8" font-size="11">Ads / Pricing / Ops</text>
-          </g>
-          <!-- Bottom -->
-          <g filter="url(#glowC)">
-            <rect x="670" y="320" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#gc)" stroke-width="3"/>
-            <text x="755" y="355" text-anchor="middle" fill="#dffaff">Revenus Off-chain</text>
-            <text x="755" y="376" text-anchor="middle" fill="#96cde0" font-size="11">Frais / € / $</text>
-          </g>
-          <g filter="url(#glowC)" id="onchain-node"><!-- id corrigé -->
-            <rect x="960" y="320" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#gc)" stroke-width="3"/>
-            <text x="1045" y="355" text-anchor="middle" fill="#dffaff">Smart Contracts</text>
-            <text x="1045" y="376" text-anchor="middle" fill="#96cde0" font-size="11">On-chain</text>
-          </g>
-          <g filter="url(#glowM)">
-            <rect x="460" y="320" rx="14" width="170" height="70" fill="rgba(0,10,16,.6)" stroke="url(#gm)" stroke-width="3"/>
-            <text x="545" y="355" text-anchor="middle" fill="#ffd8f6">Buyback / Émission</text>
-            <text x="545" y="376" text-anchor="middle" fill="#ffc3ef" font-size="11">Controller</text>
-          </g>
-        </g>
+        #neon-flow svg.active-actions .g-actions { opacity:1; filter:drop-shadow(0 0 12px rgba(102,255,204,.45)) }
+        #neon-flow svg.active-actions .g-data,
+        #neon-flow svg.active-actions .g-value   { opacity:.25 }
 
-        <!-- IAS coin -->
-        <g filter="url(#glowM)">
-          <circle cx="600" cy="470" r="54" fill="rgba(0,0,0,.5)" stroke="url(#gm)" stroke-width="4"/>
-          <circle cx="600" cy="470" r="38" fill="none" stroke="url(#gm)" stroke-width="3"/>
-          <text id="ias-token" x="600" y="476" text-anchor="middle" fill="#ffd8f6" font-size="24" font-weight="900">IAS</text>
-          <text x="600" y="496" text-anchor="middle" fill="#ffc8f2" font-size="11">IA-SOLUTION Token</text>
-        </g>
+        #neon-flow svg.active-value  .g-value   { opacity:1; filter:drop-shadow(0 0 12px rgba(255,47,208,.45)) }
+        #neon-flow svg.active-value  .g-data,
+        #neon-flow svg.active-value  .g-actions { opacity:.25 }
 
-        <!-- PATHS -->
-        <path id="pDataMain" d="M125,75 L335,75 L545,75 L755,75 L965,75 L965,215"
-              fill="none" stroke="url(#gc)" stroke-width="3" marker-end="url(#arrowC)" filter="url(#glowC)"/>
-        <path id="pExecOff" d="M965,215 C900,250 840,285 755,355"
-              fill="none" stroke="url(#gc)" stroke-width="2.5" marker-end="url(#arrowC)" filter="url(#glowC)"/>
-        <path id="pExecOn" d="M965,215 C1005,260 1030,300 1045,355"
-              fill="none" stroke="url(#gc)" stroke-width="2.5" marker-end="url(#arrowC)" filter="url(#glowC)"/>
-        <path id="pValueOff" d="M755,355 L545,355"
-              fill="none" stroke="url(#gm)" stroke-width="3" marker-end="url(#arrowM)" filter="url(#glowM)"/>
-        <path id="pValueOn" d="M1045,355 C930,355 700,355 545,355"
-              fill="none" stroke="url(#gm)" stroke-width="3" marker-end="url(#arrowM)" filter="url(#glowM)"/>
-        <path id="pToIAS" d="M545,355 C555,395 575,430 600,470"
-              fill="none" stroke="url(#gm)" stroke-width="3" marker-end="url(#arrowM)" filter="url(#glowM)"/>
-      </svg>
-    </div>
-  </div>
-</section>
+        /* labels de chemin */
+        #neon-flow text.path-label { font: 600 11px/1.2 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial; fill:#b7d8e9; letter-spacing:.2px }
 
-            <!-- ======= PARTICLES ======= -->
-            <g class="data-particles">
+        /* grille de fond */
+        #neon-flow .grid-bg { fill: url(#grid); opacity:.9 }
+
+        /* réduit les animations si l'utilisateur le demande */
+        @media (prefers-reduced-motion:reduce){
+          #neon-flow .motion { display:none }
+        }
+      </style>
+
+      <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-3">
+          Flux néon — de <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-fuchsia-500">Scrapers</span>
+          jusqu'à <span class="bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-cyan-400">IAS</span>
+        </h2>
+        <p class="text-center text-white/70 max-w-3xl mx-auto mb-6">
+          <b>Ingest → Score → Decide → Act → Measure</b>. Off-chain (frais/€/$) & On-chain (events) → <b>Controller</b> (buyback / émission),
+          puis routage de valeur vers <b>IAS</b>.
+        </p>
+
+        <!-- Filtres : emphase par type de flux -->
+        <div class="legend flex justify-center flex-wrap gap-2 mb-4">
+          <button class="chip" type="button" data-filter="data" aria-pressed="false" title="Mettre en avant le flux de données">
+            <span class="dot" style="background:#00f2ff"></span> Data
+          </button>
+          <button class="chip" type="button" data-filter="actions" aria-pressed="false" title="Mettre en avant les décisions/exécutions">
+            <span class="dot" style="background:#66ffcc"></span> Decisions/Actions
+          </button>
+          <button class="chip" type="button" data-filter="value" aria-pressed="false" title="Mettre en avant la valeur routée vers IAS">
+            <span class="dot" style="background:#ff2fd0"></span> Valeur → IAS
+          </button>
+          <button class="chip" type="button" data-filter="none" aria-pressed="true" title="Réinitialiser l'emphase">
+            Tout
+          </button>
+        </div>
+
+        <div class="panel p-3 overflow-x-auto">
+          <!-- SVG responsive -->
+          <svg id="neon-svg" viewBox="0 0 1220 560" class="w-full h-auto" role="img"
+               aria-label="Pipeline Scrapers → ETL → Features → Modèles → Policy → Exécuteurs → Off-chain / On-chain → Controller → IAS">
+            <!-- ===== DEFS ===== -->
+            <defs>
+              <linearGradient id="gc" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00f2ff"/><stop offset="100%" stop-color="#7af9ff"/>
+              </linearGradient>
+              <linearGradient id="gm" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#ff2fd0"/><stop offset="100%" stop-color="#ff9be9"/>
+              </linearGradient>
+              <linearGradient id="ga" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#66ffcc"/><stop offset="100%" stop-color="#b6ffe5"/>
+              </linearGradient>
+
+              <filter id="glowC" x="-40%" y="-40%" width="180%" height="180%">
+                <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#00f2ff" flood-opacity=".55"/>
+              </filter>
+              <filter id="glowM" x="-40%" y="-40%" width="180%" height="180%">
+                <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ff2fd0" flood-opacity=".55"/>
+              </filter>
+              <filter id="glowA" x="-40%" y="-40%" width="180%" height="180%">
+                <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#66ffcc" flood-opacity=".55"/>
+              </filter>
+
+              <marker id="arrowC" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                <path d="M0,0 L0,12 L12,6 z" fill="#7af9ff"/>
+              </marker>
+              <marker id="arrowA" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                <path d="M0,0 L0,12 L12,6 z" fill="#a7ffd9"/>
+              </marker>
+              <marker id="arrowM" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                <path d="M0,0 L0,12 L12,6 z" fill="#ff7ae1"/>
+              </marker>
+
+              <!-- fond grille -->
+              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <rect width="40" height="40" fill="rgba(8,15,20,.65)"/>
+                <path d="M40 0 H0 M0 0 V40" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+              </pattern>
+
+              <!-- labels courbes -->
+              <path id="pathMain" d="M140,105 H355 570 785 1000"/>
+              <path id="pathExecOff" d="M1000,105 V235 C910,280 845,305 760,360"/>
+              <path id="pathExecOn" d="M1000,105 V235 C1045,285 1080,310 1105,360"/>
+              <path id="pathToCtrlOff" d="M760,360 H610"/>
+              <path id="pathToCtrlOn" d="M1105,360 C980,360 790,360 610,360"/>
+              <path id="pathToIAS" d="M610,360 C625,405 650,445 680,490"/>
+            </defs>
+
+            <!-- fond -->
+            <rect class="grid-bg" x="0" y="0" width="1220" height="560"/>
+
+            <!-- ===== NODES ===== -->
+            <g font-size="13" font-weight="700">
+              <!-- ligne du haut (DATA) -->
+              <g class="g-data" filter="url(#glowC)">
+                <g>
+                  <rect x="55" y="70" rx="14" width="170" height="70" fill="rgba(0,10,16,.55)" stroke="url(#gc)" stroke-width="3"/>
+                  <text x="140" y="105" text-anchor="middle" fill="#dffaff">Scrapers</text>
+                  <text x="140" y="125" text-anchor="middle" fill="#8fbed1" font-size="11">Web / API</text>
+                </g>
+                <g>
+                  <rect x="270" y="70" rx="14" width="170" height="70" fill="rgba(0,10,16,.55)" stroke="url(#gc)" stroke-width="3"/>
+                  <text x="355" y="103" text-anchor="middle" fill="#dffaff">ETL / Normalisation</text>
+                  <text x="355" y="124" text-anchor="middle" fill="#8fbed1" font-size="11">clean → features</text>
+                </g>
+                <g>
+                  <rect x="485" y="70" rx="14" width="170" height="70" fill="rgba(0,10,16,.55)" stroke="url(#gc)" stroke-width="3"/>
+                  <text x="570" y="105" text-anchor="middle" fill="#dffaff">Feature Store</text>
+                  <text x="570" y="125" text-anchor="middle" fill="#8fbed1" font-size="11">real-time / batch</text>
+                </g>
+                <g>
+                  <rect x="700" y="70" rx="14" width="170" height="70" fill="rgba(0,10,16,.55)" stroke="url(#gc)" stroke-width="3"/>
+                  <text x="785" y="103" text-anchor="middle" fill="#dffaff">Modèles & Scoring</text>
+                  <text x="785" y="124" text-anchor="middle" fill="#8fbed1" font-size="11">Uplift / LTV</text>
+                </g>
+              </g>
+
+              <!-- décision + exécution -->
+              <g class="g-actions" filter="url(#glowA)">
+                <g>
+                  <rect x="915" y="70" rx="14" width="170" height="70" fill="rgba(0,10,16,.55)" stroke="url(#ga)" stroke-width="3"/>
+                  <text x="1000" y="103" text-anchor="middle" fill="#e7ffee">Policy / Decision</text>
+                  <text x="1000" y="124" text-anchor="middle" fill="#a8ffd8" font-size="11">ROI min / SLA</text>
+                </g>
+                <g>
+                  <rect x="915" y="235" rx="14" width="170" height="70" fill="rgba(0,10,16,.55)" stroke="url(#ga)" stroke-width="3"/>
+                  <text x="1000" y="270" text-anchor="middle" fill="#e7ffee">Exécuteurs</text>
+                  <text x="1000" y="291" text-anchor="middle" fill="#a8ffd8" font-size="11">Ads / Pricing / Ops</text>
+                </g>
+              </g>
+
+              <!-- bas : destinations -->
+              <g class="g-data" filter="url(#glowC)">
+                <g>
+                  <rect x="675" y="325" rx="14" width="170" height="70" fill="rgba(0,10,16,.55)" stroke="url(#gc)" stroke-width="3"/>
+                  <text x="760" y="360" text-anchor="middle" fill="#dffaff">Revenus Off-chain</text>
+                  <text x="760" y="381" text-anchor="middle" fill="#8fbed1" font-size="11">Frais / € / $</text>
+                </g>
+                <g>
+                  <rect x="1060" y="325" rx="14" width="170" height="70" fill="rgba(0,10,16,.55)" stroke="url(#gc)" stroke-width="3"/>
+                  <text x="1145" y="360" text-anchor="middle" fill="#dffaff">Smart Contracts</text>
+                  <text x="1145" y="381" text-anchor="middle" fill="#8fbed1" font-size="11">On-chain</text>
+                </g>
+              </g>
+
+              <!-- controller -->
+              <g class="g-value" filter="url(#glowM)">
+                <rect x="505" y="325" rx="14" width="170" height="70" fill="rgba(0,10,16,.55)" stroke="url(#gm)" stroke-width="3"/>
+                <text x="590" y="360" text-anchor="middle" fill="#ffd8f6">Buyback / Émission</text>
+                <text x="590" y="381" text-anchor="middle" fill="#ffc3ef" font-size="11">Controller</text>
+              </g>
+            </g>
+
+            <!-- pièce IAS -->
+            <g class="g-value" filter="url(#glowM)">
+              <circle cx="680" cy="500" r="54" fill="rgba(0,0,0,.5)" stroke="url(#gm)" stroke-width="4"/>
+              <circle cx="680" cy="500" r="38" fill="none" stroke="url(#gm)" stroke-width="3"/>
+              <text x="680" y="506" text-anchor="middle" fill="#ffd8f6" font-size="24" font-weight="900">IAS</text>
+              <text x="680" y="526" text-anchor="middle" fill="#ffc8f2" font-size="11">IA-SOLUTION Token</text>
+            </g>
+
+            <!-- ===== CHEMINS (avec labels) ===== -->
+            <!-- data main -->
+            <path id="d-main" class="g-data" d="M140,105 H355 570 785 1000" fill="none" stroke="url(#gc)" stroke-width="3" marker-end="url(#arrowC)"/>
+            <text class="path-label g-data"><textPath href="#pathMain" startOffset="54%">flux data</textPath></text>
+
+            <!-- vers exécuteurs -->
+            <path id="d-exec-off" class="g-actions" d="M1000,105 V235" fill="none" stroke="url(#ga)" stroke-width="3" marker-end="url(#arrowA)"/>
+            <text class="path-label g-actions"><textPath href="#pathExecOff" startOffset="10%">intents → actions</textPath></text>
+
+            <!-- split exécuteurs -> revenus off-chain -->
+            <path id="d-to-off" class="g-actions" d="M1000,235 C910,280 845,305 760,360" fill="none" stroke="url(#ga)" stroke-width="2.6" marker-end="url(#arrowA)"/>
+
+            <!-- split exécuteurs -> on-chain -->
+            <path id="d-to-on" class="g-actions" d="M1000,235 C1045,285 1080,310 1105,360" fill="none" stroke="url(#ga)" stroke-width="2.6" marker-end="url(#arrowA)"/>
+
+            <!-- value off-chain -> controller -->
+            <path id="v-off" class="g-value" d="M760,360 H610" fill="none" stroke="url(#gm)" stroke-width="3" marker-end="url(#arrowM)"/>
+            <text class="path-label g-value"><textPath href="#pathToCtrlOff" startOffset="40%">frais / revenus</textPath></text>
+
+            <!-- value on-chain -> controller -->
+            <path id="v-on" class="g-value" d="M1105,360 C980,360 790,360 610,360" fill="none" stroke="url(#gm)" stroke-width="3" marker-end="url(#arrowM)"/>
+            <text class="path-label g-value"><textPath href="#pathToCtrlOn" startOffset="55%">événements on-chain</textPath></text>
+
+            <!-- controller -> IAS -->
+            <path id="v-ias" class="g-value" d="M610,360 C625,405 650,445 680,490" fill="none" stroke="url(#gm)" stroke-width="3" marker-end="url(#arrowM)"/>
+            <text class="path-label g-value"><textPath href="#pathToIAS" startOffset="12%">routage de valeur → IAS</textPath></text>
+
+            <!-- particules (masquées si reduce motion) -->
+            <g class="motion">
               <circle r="5" fill="#cfffff">
                 <animateMotion dur="6s" repeatCount="indefinite" rotate="auto">
-                  <mpath xlink:href="#pDataMain"/>
+                  <mpath xlink:href="#d-main"/>
                 </animateMotion>
                 <animate attributeName="opacity" values="0;1;1;0" dur="6s" repeatCount="indefinite"/>
               </circle>
               <circle r="4" fill="#cfffff">
-                <animateMotion dur="4.5s" begin="1.2s" repeatCount="indefinite" rotate="auto">
-                  <mpath xlink:href="#pExecOff"/>
+                <animateMotion dur="4.4s" begin="1s" repeatCount="indefinite" rotate="auto">
+                  <mpath xlink:href="#d-to-off"/>
                 </animateMotion>
-                <animate attributeName="opacity" values="0;1;1;0" dur="4.5s" begin="1.2s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;1;1;0" dur="4.4s" begin="1s" repeatCount="indefinite"/>
               </circle>
               <circle r="4" fill="#cfffff">
-                <animateMotion dur="4.5s" begin=".6s" repeatCount="indefinite" rotate="auto">
-                  <mpath xlink:href="#pExecOn"/>
+                <animateMotion dur="4.4s" begin=".5s" repeatCount="indefinite" rotate="auto">
+                  <mpath xlink:href="#d-to-on"/>
                 </animateMotion>
-                <animate attributeName="opacity" values="0;1;1;0" dur="4.5s" begin=".6s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;1;1;0" dur="4.4s" begin=".5s" repeatCount="indefinite"/>
               </circle>
               <circle r="5" fill="#ffd3f5">
-                <animateMotion dur="3.6s" begin="0s" repeatCount="indefinite" rotate="auto">
-                  <mpath xlink:href="#pValueOff"/>
+                <animateMotion dur="3.4s" begin="0s" repeatCount="indefinite" rotate="auto">
+                  <mpath xlink:href="#v-off"/>
                 </animateMotion>
-                <animate attributeName="opacity" values="0;1;1;0" dur="3.6s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;1;1;0" dur="3.4s" begin="0s" repeatCount="indefinite"/>
               </circle>
               <circle r="5" fill="#ffd3f5">
-                <animateMotion dur="3.8s" begin="1s" repeatCount="indefinite" rotate="auto">
-                  <mpath xlink:href="#pValueOn"/>
+                <animateMotion dur="3.6s" begin=".8s" repeatCount="indefinite" rotate="auto">
+                  <mpath xlink:href="#v-on"/>
                 </animateMotion>
-                <animate attributeName="opacity" values="0;1;1;0" dur="3.8s" begin="1s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;1;1;0" dur="3.6s" begin=".8s" repeatCount="indefinite"/>
               </circle>
               <circle r="6" fill="#ffe6fb">
-                <animateMotion dur="2.8s" begin=".8s" repeatCount="indefinite" rotate="auto">
-                  <mpath xlink:href="#pToIAS"/>
+                <animateMotion dur="2.8s" begin=".6s" repeatCount="indefinite" rotate="auto">
+                  <mpath xlink:href="#v-ias"/>
                 </animateMotion>
-                <animate attributeName="opacity" values="0;1;1;0" dur="2.8s" begin=".8s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;1;1;0" dur="2.8s" begin=".6s" repeatCount="indefinite"/>
               </circle>
             </g>
           </svg>
